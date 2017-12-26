@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/lightblog-group.iml" filepath="$PROJECT_DIR$/lightblog-group.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lightblog-web/lightblog-web.iml" filepath="$PROJECT_DIR$/lightblog-web/lightblog-web.iml" />
+    </modules>
+  </component>
+</project>

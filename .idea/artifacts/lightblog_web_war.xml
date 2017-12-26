@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="lightblog-web:war">
+    <output-path>$PROJECT_DIR$/lightblog-web/target</output-path>
+    <root id="archive" name="lightblog-web.war">
+      <element id="artifact" artifact-name="lightblog-web:war exploded" />
+    </root>
+  </artifact>
+</component>
