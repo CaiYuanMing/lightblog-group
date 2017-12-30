@@ -146,21 +146,21 @@
         </dependency>
 
         <!-- 映入JSON -->
+        <!-- Jackson JSON Mapper -->
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.1.0</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.1.0</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <!-- 上传组件包 -->
@@ -193,6 +193,7 @@
                 <directory>src/main/resources
                 </directory>
                 <includes>
+                    <include>**/*.properties</include>
                     <include>**/*.xml</include>
                 </includes>
                 <filtering>true</filtering>
