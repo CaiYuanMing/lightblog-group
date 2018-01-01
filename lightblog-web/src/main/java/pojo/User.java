@@ -194,4 +194,6 @@ public class User {
     public void setUserRegisterTime(Date userRegisterTime) {
         this.userRegisterTime = userRegisterTime;
     }
+
+
 }
