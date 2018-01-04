@@ -1,0 +1,211 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.bold_black_top_border {
+	border-top: 3px solid #000000;
+	border-left-width: 0;
+	border-bottom-width: 0;
+	border-right-width: 0;
+}
+
+.auto_height {
+	height: auto;
+}
+
+.font_basic {
+	font-family: "微软雅黑"," 楷体", Microsoft YaHei UI Light;
+}
+
+.width_auto {
+	width: auto;
+}
+
+
+.inline_block {
+	display: inline-block;
+}
+
+.float_none {
+	float: none;
+}
+
+
+
+.hr_sepa {
+	width: 10%;
+	background-color: #AAAAAA;
+	height: 1px;
+	
+}
+
+
+
+.width_complie {
+	width: 100%;
+}
+
+.content_head_info_nav {
+	width: 100%;
+}
+
+.margin_20 {
+	margin-top: 20px;
+	padding-top: 20px;
+}
+
+.nav_white_without_border {
+	background-color: white;
+	border-width: 0;
+}
+
+.block_name_prod_owner {
+	padding-top: 100px;
+	padding-bottom: 27px;
+	height: auto;
+}
+
+.block_black_for_well {	
+	padding: 8px 38px;
+	background-color: black;
+	color: white;
+}
+
+.color_gray {
+	color: gray;
+}
+
+.color_minor {
+	color: #A5A5A5;
+}
+
+.block_prod_owner {
+	margin-top: 15px;
+}
+
+.text_head {
+	font-size: 18px;
+}
+
+.block_name_prod_owner_xs {
+	padding-top: 40px;
+	padding-bottom: 27px;
+	height: auto;
+}
+
+.margin_side_23 {
+	margin: 0 11.5px;
+}
+
+.content_flow {
+		
+}
+
+
+
+.id_article_for_dispatcher {
+	display: none;
+}
+
+.head_ceil_content_flow {
+	margin-bottom: 65px;
+}
+
+#declare_foot {
+	margin-top: 50px;
+}
+
+.tag_article {
+	margin: 20px 0;
+}
+
+.content_article {
+	margin-bottom: 30px;
+}
+
+.ceil_content_flow {
+	margin: 50px 0;
+	
+}
+
+
+
+.text_title {
+	font-size: 24px;
+	font-weight: 450;
+}
+
+.info_article {
+	margin-top: 7px;
+}
+
+
+.button_to_complie_article_over {
+	border-color: black;
+	background-color: white;	
+	display: inline-block;	
+	padding: 5px 10px;
+}
+
+.button_to_complie_article {	
+				display: inline-block;			 	
+			 	border: 1px solid #000000;
+				background-color: white;
+				color:black;
+				padding: 5px 10px;
+}
+
+.title_article {
+	font-size: 24px;
+	font-weight: 450;
+}
+
+.btn_up {
+	position: absolute;
+	bottom: 45px;
+	right: 42px;
+}
+
+.block_black_for_btn {
+	border: 1px solid #000000;
+	background-color: white;
+}
+
+#btn_to_head {
+	position: fixed;
+    bottom: 18px;
+    right: 37px;
+	border: 1px solid #000000;
+	padding: 0 3px;	
+    display: none;
+}
+
+#btn_to_back {
+	display: inline-block;
+	margin-right: 50px;
+	border: 1px solid #000000;
+}
+
+.magin_top_10 {
+	margin-top: 10px;
+}
+
+.magin_top_15 {
+	margin-top: 15px;
+}
+
+.color_black {
+	color: black;
+}
+
+.float_right {
+	float: right;
+}
+
+.margin_top_-9 {
+	padding-top: -9px;
+}
+
+#panel_info {
+	display: none;
+}
