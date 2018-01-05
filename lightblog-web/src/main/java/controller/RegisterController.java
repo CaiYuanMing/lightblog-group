@@ -15,6 +15,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.ModelAndView;
 import pojo.UserExample;
 import service.RegisterService;
+import service.WorkService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -27,6 +28,8 @@ import java.util.Map;
 public class RegisterController{
     @Autowired
     private  RegisterService registerService;
+    @Autowired
+    private WorkService workService;
 
     static Logger log = Logger.getLogger(RegisterController.class);
     @RequestMapping("nameCheck")
@@ -81,13 +84,26 @@ public class RegisterController{
             log.info("注册：进入用户添加");
             int count = registerService.addUser(userId,userName,userPassword);
             log.info(count+"条记录受到影响");
+
+            log.info("初始化userId="+userId+"的关于页数据");
+            int count2 = workService.insertAbout(userId,"","");
+
             Map<String,Object> resultMap = new HashMap<String,Object>();
-            if (count>0){
+            if (count==1&&count2==1){
                 resultMap.put("outcome","success");
-            }else {
+                log.info("账户注册成功，关于页初始化成功");
+            }else if (count==1&&count2==0){
                 resultMap.put("outcome","fail");
-                resultMap.put("msg","系统故障！");
-                log.info("用户注册失败！");
+                resultMap.put("msg","系统故障！账户注册成功，但关于页无法使用，请联系管理员解决");
+                log.error("账户注册成功，关于页初始化失败！");
+            }else if (count==0&&count2==1){
+                resultMap.put("outcome","fail");
+                resultMap.put("msg","系统故障！账户注册失败，但关于页已经初始化，请联系管理员解决");
+                log.error("账户注册失败，关于页已经初始化！");
+            }else if (count==0&&count2==0){
+                resultMap.put("outcome","fail");
+                resultMap.put("msg","系统故障！账户注册失败，关于页初始化失败");
+                log.error("账户注册失败，关于页已经初始化！");
             }
         return resultMap;
     }

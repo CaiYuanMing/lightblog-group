@@ -14,8 +14,6 @@ public class RegisterServiceImpl implements RegisterService {
     @Autowired
     private UserMapper userMapper;
     @Autowired
-    private UserExample userExample;
-    @Autowired
     private User user;
     public boolean isUserExist(UserExample userExample) {
         if (userMapper.selectByExample(userExample).size()>0){

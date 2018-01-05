@@ -11,7 +11,6 @@
 	<link href="css/edit_page.css" rel="stylesheet">
 	<link href="css/common.css" rel="stylesheet">
 
-
 </head>
 <body>
 <div id="content_container">
@@ -44,9 +43,7 @@
 				<div id="button_add_tag"  title="为文章添加标签" data-toggle="popover">
 					<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
 				</div>
-				<div id="container_tag">
-					<span class="label label-success inline_block">Success</span>
-				</div>
+				<div id="container_tag"></div>
 			</div>
 			<div class="editormd" id="mdeditor">
 				<textarea class="editormd-markdown-textarea" name="mdeditor-markdown-doc"></textarea>
@@ -104,10 +101,13 @@
                 toolbarAutoFixed :true,
                 onfullscreen : function() {
                     $("#declare_foot").hide();
+                    $(".form-group").hide();
+                    $("nav").hide();
                 },
-
                 onfullscreenExit : function() {
                     $("#declare_foot").show();
+                    $(".form-group").show();
+                    $("nav").show();
                 },
                 onload : function() {
                     console.log('onload', this);

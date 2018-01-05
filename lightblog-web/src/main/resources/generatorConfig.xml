@@ -14,6 +14,8 @@
         <sqlMapGenerator targetPackage="mapping" targetProject="src/main/resources" />
         <javaClientGenerator type="XMLMAPPER" targetPackage="mapper" targetProject="src/main/java" />
         <!--表名-->
-        <table tableName="user"/>
+        <table tableName="work_info">
+            <generatedKey column="work_id" sqlStatement="MySql" identity="true"/>
+        </table>
     </context>
 </generatorConfiguration>

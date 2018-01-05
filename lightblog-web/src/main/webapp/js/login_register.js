@@ -131,7 +131,8 @@ $(function(){
                     console.log("data.outcome = "+data.outcome+"data.msg = "+data.msg);
                     if ("success" === data.outcome) {
                         $.status_on_success($("#input_userpassword_login"));
-                        $("#form_login").submit();
+                        // $("#form_login").submit();
+                        window.location.href='/lightblog/login/initMainPage';
                     } else {
                         console.log("data.outcome = "+data.outcome+"data.msg = "+data.msg);
 

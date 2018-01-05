@@ -79,6 +79,6 @@ public class LoginController {
     @RequestMapping("initMainPage")
 
     public void  initMainPage(HttpServletResponse response) throws IOException {
-        response.sendRedirect("../login_register.html");
+        response.sendRedirect("../editPage.html");
     }
 }
