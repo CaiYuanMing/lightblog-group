@@ -25,7 +25,7 @@ $(function(){
     $('#input_category').typeahead({
         source: function (query, process) {
             console.log("正在匹配分类");
-            console.log("query = "+query)
+            console.log("query = "+query);
             $.ajax({
                 url: 'editor/categoryTip',
                 type: 'POST',
@@ -41,23 +41,6 @@ $(function(){
         items:5, // 设置展示多少条 默认8条
     });
     //----标签
-    //点击添加标签按钮，弹出悬浮框
-    //----悬浮框
-    $("#button_add_tag").popover({
-        container :'body',
-        trigger :'click',
-        placement : 'bottom',
-        html : true,
-        content: '<div class="form-group"><label for="input_tag" class="control-label sr-only">标签输入</label><input type="text" class="form-control" id="input_tag" placeholder="按回车键添加..." autocomplete="off" data-provide="typeahead" ></div>'
-    });
-    //popover初始化
-    $("[data-toggle='popover']").popover();
-    //点击添加按钮，在div:container_tag 添加输入的标签
-    $(document).on("click","#button_submit_tag_pop",function(){
-        console.log("button_submit_tag_pop : click ----");
-        $.add_tag_to_container_tag($("#input_tag").val());
-        $("#input_tag").val("");
-    });
     //input_tag按回车添加标签
     $(document).on("keydown","#input_tag",function(event){
         if(event.which == "13"){

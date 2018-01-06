@@ -1,61 +1,62 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>LightBlog-写作</title>
-	<!--css-->
-	<link href="editormd/css/editormd.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-	<link href="css/edit_page.css" rel="stylesheet">
-	<link href="css/common.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LightBlog-写作</title>
+    <!--css-->
+    <link href="editormd/css/editormd.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+    <link href="css/edit_page.css" rel="stylesheet">
+    <link href="css/common.css" rel="stylesheet">
 
 </head>
 <body>
 <div id="content_container">
-	<div id="head_part">
-		<nav class="navbar navbar-default navbar-fixed-bottom nav_white_without_border">
-			<div class="container magin_top_15">
-				<div id="btn_to_back" class="hidden-xs" data-toggle="tooltip" data-placement="bottom"  title="返回主页">
-					<span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
-				</div>
-				<button id="button_save" type="button" class="btn btn-success navbar-btn btn-sm color_black">
-					<span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-					保存
-				</button>
-			</div>
-		</nav>
-	</div>
-	<div id="panel_main" class="center-block">
-		<div id="panel_info"></div>
-		<form>
-			<div class="form-group">
-				<label for="input_title" class="control-label">标题</label>
-				<input type="text" class="form-control" id="input_title" placeholder="请输入标题...">
-			</div>
-			<div class="form-group">
-				<label for="input_category" class="control-label">分类</label>
-				<input type="text" class="form-control" id="input_category" placeholder="请输入分类..." autocomplete="off" data-provide="typeahead">
-			</div>
-			<div id="panel_tag">
-				<label class="control-label">添加标签</label>
-				<div id="button_add_tag"  title="为文章添加标签" data-toggle="popover">
-					<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
-				</div>
-				<div id="container_tag"></div>
-			</div>
-			<div class="editormd" id="mdeditor">
-				<textarea class="editormd-markdown-textarea" name="mdeditor-markdown-doc"></textarea>
-				<!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
-				<textarea class="editormd-html-textarea" name="mdeditor-html-code"></textarea>
-			</div>
-		</form>
-	</div>
-	<div id="declare_foot" class="text-center">
-		<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>&nbsp;2017&nbsp;&nbsp;
-		<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;LightBlog
-	</div>
+    <div id="head_part">
+        <nav class="navbar navbar-default navbar-fixed-bottom nav_white_without_border">
+            <div class="container magin_top_15">
+                <div id="btn_to_back" class="hidden-xs" data-toggle="tooltip" data-placement="bottom"  title="返回主页">
+                    <span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span>
+                </div>
+                <button id="button_save" type="button" class="btn btn-success navbar-btn btn-sm color_black">
+                    <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
+                    保存
+                </button>
+            </div>
+        </nav>
+    </div>
+    <div id="panel_main" class="center-block">
+        <div id="panel_info"></div>
+        <form>
+            <div class="form-group">
+                <label for="input_title" class="control-label">标题</label>
+                <input type="text" class="form-control" id="input_title" placeholder="请输入标题...">
+            </div>
+            <div class="form-group">
+                <label for="input_category" class="control-label">分类</label>
+                <input type="text" class="form-control" id="input_category" placeholder="请输入分类..." autocomplete="off" data-provide="typeahead">
+            </div>
+            <div id="panel_tag">
+                <label class="control-label">添加标签</label>
+                <div id="div_input_tag" class="form-group inline_block margin_side_23">
+                    <label for="input_tag" class="control-label sr-only">标签输入</label>
+                    <input type="text" class="form-control input_sm" id="input_tag" placeholder="按回车键添加..." autocomplete="off" data-provide="typeahead">
+                </div>
+                <div id="container_tag"></div>
+            </div>
+            <div class="editormd" id="mdeditor">
+                <textarea class="editormd-markdown-textarea" name="mdeditor-markdown-doc"></textarea>
+                <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
+                <textarea class="editormd-html-textarea" name="mdeditor-html-code"></textarea>
+            </div>
+        </form>
+    </div>
+    <div id="declare_foot" class="text-center">
+        <span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>&nbsp;2017&nbsp;&nbsp;
+        <span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;LightBlog
+    </div>
 </div>
 
 <!-- scripts -->
