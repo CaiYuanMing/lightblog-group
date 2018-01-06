@@ -14,8 +14,8 @@ import service.WorkService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 @Service
 public class WorkServiceImpl implements WorkService {
     static Logger log = Logger.getLogger(WorkServiceImpl.class);
@@ -88,6 +88,48 @@ public class WorkServiceImpl implements WorkService {
         count = workInfoMapper.deleteByPrimaryKey(workId);
         log.info("依据workid: "+workId+"删除work_info表记录，"+count+"条记录受到影响！");
         return count;
+    }
+
+    public String getCategoryTip(String query,HttpSession httpSession) {
+        log.info("----分类输入提示处理：start");
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+        WorkInfoExample workInfoExample = (WorkInfoExample)applicationContext.getBean("workInfoExample");
+
+        workInfoExample.or().andWorkCategoryLike("%"+query+"%");
+        List<WorkInfo> workInfoList = workInfoMapper.selectByExample(workInfoExample);
+        Set<String> categoryTipSet = new HashSet<String>();
+        //分类结果去重
+        for (int i = 0; i < workInfoList.size(); i++) {
+            categoryTipSet.add(workInfoList.get(i).getWorkCategory());
+        }
+        List<String> categoryTipList = new ArrayList<String>(categoryTipSet);
+        //结果按规范封装
+        StringBuffer categoryTips = new StringBuffer("");
+        for (int i = 0; i < categoryTipList.size(); i++) {
+            if (i==0){
+                if (i==categoryTipList.size()-1){
+                    categoryTips.append("[\"");
+                    categoryTips.append(categoryTipList.get(i));
+                    categoryTips.append("\"]");
+                }else {
+                    categoryTips.append("[\"");
+                    categoryTips.append(categoryTipList.get(i));
+                    categoryTips.append("\",");
+                }
+            }else  if (i==categoryTipList.size()-1) {
+                categoryTips.append("\"");
+                categoryTips.append(categoryTipList.get(i));
+                categoryTips.append("\"]");
+            }else{
+               categoryTips.append("\"");
+               categoryTips.append(categoryTipList.get(i));
+               categoryTips.append("\",");
+           }
+        }
+        log.info("返回数据："+categoryTips.toString());
+        log.info("----分类输入提示处理：end");
+        return categoryTips.toString();
     }
 
     //work_content表-CRUD
@@ -169,7 +211,50 @@ public class WorkServiceImpl implements WorkService {
         }
     }
 
- //about表-CRUD
+    //标签输入提示
+    public String getTagTip(String query, HttpSession httpSession) {
+        log.info("----标签输入提示处理：start");
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+        TagWorkExample tagWorkExample = (TagWorkExample)applicationContext.getBean("tagWorkExample");
+
+        tagWorkExample.or().andTagNameLike("%"+query+"%");
+        List<TagWorkKey> tagWorkKeyList = tagWorkMapper.selectByExample(tagWorkExample);
+        Set<String> tagTipSet = new HashSet<String>();
+        //分类结果去重
+        for (int i = 0; i < tagWorkKeyList.size(); i++) {
+            tagTipSet.add(tagWorkKeyList.get(i).getTagName());
+        }
+        List<String> tagTipList = new ArrayList<String>(tagTipSet);
+        //结果按规范封装
+        StringBuffer tagTips = new StringBuffer("");
+        for (int i = 0; i < tagTipList.size(); i++) {
+            if (i==0){
+                if (i==tagTipList.size()-1){
+                    tagTips.append("[\"");
+                    tagTips.append(tagTipList.get(i));
+                    tagTips.append("\"]");
+                }else {
+                    tagTips.append("[\"");
+                    tagTips.append(tagTipList.get(i));
+                    tagTips.append("\",");
+                }
+            }else  if (i==tagTipList.size()-1) {
+                tagTips.append("\"");
+                tagTips.append(tagTipList.get(i));
+                tagTips.append("\"]");
+            }else{
+                tagTips.append("\"");
+                tagTips.append(tagTipList.get(i));
+                tagTips.append("\",");
+            }
+        }
+        log.info("返回数据："+tagTips.toString());
+        log.info("----标签输入提示处理：end");
+        return tagTips.toString();
+    }
+
+    //about表-CRUD
     //插入
     public int insertAbout(String aboutUserId, String aboutContentMarkdown, String aboutContentHtml) {
         log.info("insertAbout接收参数： aboutUserId = "+aboutUserId+"\n aboutContentMarkdown = "+aboutContentMarkdown+"\n aboutContentHtml = "+aboutContentHtml);

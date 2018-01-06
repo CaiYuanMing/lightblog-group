@@ -21,7 +21,25 @@ $(function(){
             }
         });
     });
-
+    //分类输入框，输入提示
+    $('#input_category').typeahead({
+        source: function (query, process) {
+            console.log("正在匹配分类");
+            console.log("query = "+query)
+            $.ajax({
+                url: 'editor/categoryTip',
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    query:query
+                },
+                success: function(data) {
+                    process(data);
+                }
+            });
+        },
+        items:5, // 设置展示多少条 默认8条
+    });
     //----标签
     //点击添加标签按钮，弹出悬浮框
     //----悬浮框
@@ -30,7 +48,7 @@ $(function(){
         trigger :'click',
         placement : 'bottom',
         html : true,
-        content: '<div class="form-group"><label for="input_tag" class="control-label sr-only">标签输入</label><input type="text" class="form-control" id="input_tag" placeholder="按回车键添加..." autocomplete="off" data-provide="typeahead"></div>'
+        content: '<div class="form-group"><label for="input_tag" class="control-label sr-only">标签输入</label><input type="text" class="form-control" id="input_tag" placeholder="按回车键添加..." autocomplete="off" data-provide="typeahead" ></div>'
     });
     //popover初始化
     $("[data-toggle='popover']").popover();
@@ -52,18 +70,21 @@ $(function(){
     //标签输入框输入提示初始化
     $('#input_tag').typeahead({
         source: function (query, process) {
+            console.log("正在匹配分类");
+            console.log("query = "+query);
             $.ajax({
-                url: 'editor/matchTag',
+                url: 'editor/tagTip',
                 type: 'POST',
                 dataType: 'JSON',
-                data: query,
+                data: {
+                    query:query
+                },
                 success: function(data) {
                     process(data);
                 }
             });
         },
         items:8, // 设置展示多少条 默认8条
-        minLength: 0
     });
     //点击相应标签去除标签
 

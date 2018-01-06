@@ -105,6 +105,20 @@ public class EditorController {
         }
     }
 
+    @RequestMapping("categoryTip")
+    @ResponseBody
+    public String categoryTip(String query,HttpSession httpSession){
+        log.info("接收参数 query = "+query);
+        return workService.getCategoryTip(query,httpSession);
+    }
+
+    @RequestMapping("tagTip")
+    @ResponseBody
+    public String tagTip(String query,HttpSession httpSession){
+        log.info("接收参数 query = "+query);
+        return workService.getTagTip(query,httpSession);
+    }
+
 
 
     @RequestMapping("saveAbout")
