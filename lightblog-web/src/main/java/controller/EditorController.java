@@ -95,7 +95,7 @@ public class EditorController {
             FileUtils.copyInputStreamToFile(attach.getInputStream(), realFile);
 
             //下面response返回的json格式是editor.md所限制的，规范输出就OK
-            response.getWriter().write( "{\"success\": 1, \"message\":\"上传成功\",\"url\":\"/resources/upload/" + attach.getOriginalFilename() + "\"}" );
+            response.getWriter().write( "{\"success\": 1, \"message\":\"上传成功\",\"url\":\"lightblog/resources/upload/" + attach.getOriginalFilename() + "\"}" );
         } catch (Exception e) {
             try {
                 response.getWriter().write( "{\"success\":0}" );

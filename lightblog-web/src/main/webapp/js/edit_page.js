@@ -13,10 +13,16 @@ $(function(){
     //----输入框
     //重置输入框的聚焦即还原性质
     $.init_on_form_reload();
-    //输入框失焦，如果输入不为空，则更改输入框状态为校验成功
+    //输入框失焦，如果不是标签输入框且输入不为空，则更改输入框状态为校验成功，标签输入框需另外校验（标签输入不能有“&）
     $("form input").each(function(){
         $(this).blur(function(){
-            if($(this).val().length>0){
+            if( $(this).attr("id")==="input_tag"){
+                if(/&+/.test($(this).val())){
+                    $.status_on_error(this,"&是系统保留字符，标签内不能包含&！");
+                }else if($(this).val().length>0){
+                    $.status_on_success(this);
+                }
+            }else if($(this).val().length>0){
                 $.status_on_success(this);
             }
         });
@@ -41,6 +47,28 @@ $(function(){
         items:5, // 设置展示多少条 默认8条
     });
     //----标签
+    //点击添加标签按钮，隐藏自身，弹出input_tag
+//    $(document).on("click","#button_add_tag",function(){
+//		str = '<div id="div_input_tag" class="form-group inline_block margin_side_23"><label for="input_tag" class="control-label sr-only">标签输入</label><input type="text" class="form-control input_sm" id="input_tag" placeholder="按回车键添加..." autocomplete="off" data-provide="typeahead"></div>';
+//		$(this).before(str);
+//		$(this).remove();
+//    });
+//    //点击input_tag以外区域，input_tag隐藏，显示添加标签按钮
+//     $('body').click(function (event) {
+//            var target = $(event.target);       // 判断自己当前点击的内容
+//            if (target.attr("id")!=="input_tag") {
+//               str = '<div id="button_add_tag"  title="为文章添加标签"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></div>';
+//				$("#div_input_tag").after(str);
+//				$("#div_input_tag").remove();
+//            }
+//        });
+//
+//    //点击添加按钮，在div:container_tag 添加输入的标签
+//    $(document).on("click","#button_submit_tag_pop",function(){
+//        console.log("button_submit_tag_pop : click ----");
+//        $.add_tag_to_container_tag($("#input_tag").val());
+//        $("#input_tag").val("");
+//    });
     //input_tag按回车添加标签
     $(document).on("keydown","#input_tag",function(event){
         if(event.which == "13"){
