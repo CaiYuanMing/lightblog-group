@@ -33,6 +33,7 @@ function jump_to_page_categorylist(){
     }
 }
 
+
 function jump_to_page_taglist(){
     var ownerId = $(".val_ownerId").text();
     if(ownerId === ""){
@@ -53,4 +54,25 @@ function jump_to_page_about(){
 
 function jump_to_page_workdetail(workId){
     window.location.href = "/lightblog/workdetail/jumpToWorkDetail?workId="+workId;
+}
+
+function list_work_by_category(category,id_container_list){
+    var ownerId = $(".val_ownerId").text();
+    console.log("-Ajax:获取ownerId = "+ownerId+" category= "+category+" 的文章列表");
+	$.ajax({
+        type: "POST",
+        url: "worklist/listByCategory",
+        data: {
+            userId: ownerId,
+            category: category
+        },
+        dataType: "json",
+        success: function(data){
+            console.log(data);
+        },
+        error: function(jqXHR){
+            var worning_msg = "发生错误：" + jqXHR.status;
+            alert(worning_msg);
+        },
+    });
 }

@@ -1,0 +1,13 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+#container_category {
+	
+}
+
+.categpry_item {
+	display: inline-block;
+	margin-right: 15px;
+	margin-bottom: 20px;
+}
