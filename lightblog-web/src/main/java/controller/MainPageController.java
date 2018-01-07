@@ -20,20 +20,21 @@ import java.util.Map;
 @RequestMapping("mainpage")
 public class MainPageController {
     private  static Logger log = Logger.getLogger(RegisterController.class);
-    private  int count = 0;
     @Autowired
     private MainPageService mainPageService;
 
     @RequestMapping("init")
     @ResponseBody
-    public Map<String,Object> categoryTip(HttpSession httpSession){
+    public Map<String,Object> init(HttpSession httpSession){
         log.info("-----主页初始化：start");
 
         Map<String,Object> resultMap = new HashMap<String,Object>();
         String visitType = (String) httpSession.getAttribute("visitType");
         List<WorkTemp> workTempList = ( List<WorkTemp>)httpSession.getAttribute("workTempList");
         UserTemp userTemp = (UserTemp)httpSession.getAttribute("userTemp");
+        String ownerId = (String)httpSession.getAttribute("ownerId");
         resultMap.put("visitType",visitType);
+        resultMap.put("ownerId",ownerId);
         resultMap.put("workTempList",workTempList);
         resultMap.put("userTemp",userTemp);
 
@@ -55,6 +56,7 @@ public class MainPageController {
         }else {
             log.info("--访问类型为：visitor");
             httpSession.setAttribute("visitType","visitor");
+            httpSession.setAttribute("ownerId",ownerId);
             workTempList = mainPageService.getWorkListByOwnerId(ownerId,httpSession);
             userTemp = mainPageService.getUserTempByUserId(ownerId,httpSession);
         }

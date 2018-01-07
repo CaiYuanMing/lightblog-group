@@ -1,11 +1,5 @@
 @charset "utf-8";
 /* CSS Document */
-
-
-
-
-
-
 #btn_to_edit {
 	position: fixed;
 	bottom: 45px;
@@ -23,5 +17,13 @@
 }
 
 #val_sum_work {
+	display: none;
+}
+
+.underline {
+	text-decoration:underline;
+}
+
+.val_ownerId {
 	display: none;
 }

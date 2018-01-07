@@ -18,7 +18,8 @@
 		<div id="content_main" class="col-xs-12">
 			<div class="content_head_info_nav">
 				<div class="block_name_prod_owner text-center hidden-xs">
-					<div class="block_name_owner"><a href="#"><span class="block_black_for_well text_head name_owner"></span></a></div>
+					<div class="val_ownerId"></div>
+					<div class="block_name_owner"><span class="block_black_for_well text_head name_owner"></span></div>
 					<div class="block_prod_owner text-center"><span class="text-muted introduction_owner"></span></div>
 				</div>
 				<!--  bootstrap响应式导航-->
@@ -37,18 +38,19 @@
 
 						<div class="collapse navbar-collapse text-center" id="mynavbar">
 							<ul class="nav navbar-nav inline_block float_none">
-								<li class="margin_side_23"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br/>首页 </li>
-								<li class="margin_side_23"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><br/>归档 </li>
-								<li class="margin_side_23"><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br/>分类 </li>
-								<li class="margin_side_23"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span><br/>标签 </li>
-								<li class="margin_side_23"><span class="glyphicon glyphicon-search" aria-hidden="true"></span><br/>搜索 </li>
-								<li class="margin_side_23"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><br/>关于 </li>
+								<li><a href="javascript:jump_to_page_main();"><span class="glyphicon glyphicon-home" aria-hidden="true"></span><br/>首页 </a></li>
+								<li><a href="javascript:jump_to_page_worklist();"><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span><br/>归档 </a></li>
+								<li><a href="javascript:jump_to_page_categorylist();"><span class="glyphicon glyphicon-book" aria-hidden="true"></span><br/>分类 </a></li>
+								<li><a href="javascript:jump_to_page_taglist();"><span class="glyphicon glyphicon-tags" aria-hidden="true"></span><br/>标签 </a></li>
+								<li><a href="/lightblog/search.html"><span class="glyphicon glyphicon-search" aria-hidden="true"></span><br/>搜索 </a></li>
+								<li><a href="javascript:jump_to_page_about();"><span class="glyphicon glyphicon-user" aria-hidden="true"></span><br/>关于 </a></li>
 							</ul>
 						</div>
 					</div><!-- /.container-fluid -->
 				</nav>
 				<div class="block_name_prod_owner_xs text-center visible-xs-block">
-					<div class="block_name_owner"><a href="#"><span class="block_black_for_well text_head name_owner"></span></a></div>
+					<div class="val_ownerId"></div>
+					<div class="block_name_owner"><span class="block_black_for_well text_head name_owner"></span></div>
 					<div class="block_prod_owner text-center"><span class="text-muted introduction_owner"></span></div>
 				</div>
 			</div>
@@ -73,6 +75,8 @@
 <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
 <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script charset="utf-8" src="js/mian_page.js"></script>
+<script src="js/page_common.js"></script>
+
 <!--HtmlToMarkdown所需js-->
 <script src="editormd/lib/marked.min.js"></script>
 <script src="editormd/lib/prettify.min.js"></script>
@@ -106,6 +110,8 @@
                     console.log("确认是游客访问，设置visitType = visitor，隐藏所有编辑入口！");
                     visitType = "visitor";
                     $("#btn_to_edit").hide();
+                    //将ownerId放入.val_ownerId的dom,便于其他页面的跳转
+                    $(".val_ownerId").text(data.ownerId);
                 }console.log("根据接收参数，初始化主页内容");
                 $(".name_owner").text(data.userTemp.userName);
                 $(".introduction_owner").text(data.userTemp.userIntroduction);

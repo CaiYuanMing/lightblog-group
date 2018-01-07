@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import pojo.*;
 import service.MainPageService;
+import service.UserService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -27,7 +29,7 @@ public class MainPageServiceImpl implements MainPageService {
     @Autowired
     private TagWorkMapper tagWorkMapper;
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
     public List<WorkTemp> getWorkListByOwnerId(String ownerId,HttpSession httpSession) {
         log.info("----文章list获取处理：start");
@@ -36,6 +38,7 @@ public class MainPageServiceImpl implements MainPageService {
         WorkContent workContent;
         TagWorkExample tagWorkExample;
         List<TagWorkKey> tagWorkKeyList;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         ServletContext sc = httpSession.getServletContext();
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
@@ -47,7 +50,7 @@ public class MainPageServiceImpl implements MainPageService {
         for (int i = 0; i < workInfoList.size(); i++) {
             workTemp = (WorkTemp)applicationContext.getBean("workTemp");
             workTemp.workId = workInfoList.get(i).getWorkId();
-            workTemp.workGeneratesTime = workInfoList.get(i).getWorkGeneratesTime();
+            workTemp.workGeneratesTime = simpleDateFormat.format(workInfoList.get(i).getWorkGeneratesTime());
             workTemp.workBrowseSum = workInfoList.get(i).getWorkBrowseSum();
             workTemp.workCategory = workInfoList.get(i).getWorkCategory();
             workTemp.workTitle = workInfoList.get(i).getWorkTitle();
@@ -75,21 +78,6 @@ public class MainPageServiceImpl implements MainPageService {
     }
 
     public UserTemp getUserTempByUserId(String userId,HttpSession httpSession) {
-        log.info("----usertemp获取处理：start");
-
-        ServletContext sc = httpSession.getServletContext();
-        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
-        UserTemp userTemp = (UserTemp) applicationContext.getBean("userTemp");
-
-        User user = userMapper.selectByPrimaryKey(userId);
-
-        userTemp.userName = user.getUserName();
-        userTemp.userIntroduction = user.getUserIntroduction();
-        userTemp.userHeadiconPath = user.getUserHeadiconPath();
-
-        log.info("返回userTemp: userName = "+userTemp.userName+"\nuserIntroduction = "+userTemp.userIntroduction+"\nuserHeadiconPath = "+userTemp.userHeadiconPath);
-
-        log.info("----usertemp获取处理：end");
-        return userTemp;
+       return userService.getUserTempByUserId(userId,httpSession);
     }
 }

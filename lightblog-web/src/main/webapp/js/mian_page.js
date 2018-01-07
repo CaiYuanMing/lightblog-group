@@ -36,9 +36,38 @@ $(function(){
     //点击写作,跳转至文章编辑页
     $("#btn_to_edit").click(function(){
 
-        window.location.href = "";
+        window.location.href = "/lightblog/editPage.html";
     });
     $("[data-toggle='tooltip']").tooltip();
+    //点击主页用户名，跳转到该用户主页
+    $(document).on("click",".block_name_owner",function(){
+        var ownerId = $(".val_ownerId").text();
+        if(ownerId === ""){
+            window.location.href = "/lightblog/mainpage/jumpToMianPage";
+        }else{
+            window.location.href = "/lightblog/mainpage/jumpToMianPage?ownerId="+ownerId;
+        }
+
+    });
+    $(document).on("click",".glyphicon-home",function(){
+        var ownerId = $(".val_ownerId").text();
+        if(ownerId === ""){
+            window.location.href = "/lightblog/mainpage/jumpToMianPage";
+        }else{
+            window.location.href = "/lightblog/mainpage/jumpToMianPage?ownerId="+ownerId;
+        }
+
+    });
+    //点击归档，跳转到归档页
+    $(document).on("click",".glyphicon-th-list",function(){
+        var ownerId = $(".val_ownerId").text();
+        if(ownerId === ""){
+            window.location.href = "/lightblog/worklist/jumpToWorkList";
+        }else{
+            window.location.href = "/lightblog/worklist/jumpToWorkList?ownerId="+ownerId;
+        }
+
+    });
 });
 //显示某元素后添加可去警告框
 $.extend({'add_waring_after':function(choose_object,waring_type,msg){
