@@ -5,8 +5,9 @@ import pojo.WorkListItem;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 public interface WorkListService {
-    List<WorkListItem> getWorkListByOwnerId(String ownerId, HttpSession httpSession);
+    Map<String,Object> getWorkListMapByOwnerId(String ownerId, HttpSession httpSession);
     UserTemp getUserTempByUserId(String userId, HttpSession httpSession);
 }

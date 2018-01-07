@@ -36,7 +36,7 @@
 	width: 10%;
 	background-color: #AAAAAA;
 	height: 1px;
-	
+
 }
 
 
@@ -65,7 +65,7 @@
 	height: auto;
 }
 
-.block_black_for_well {	
+.block_black_for_well {
 	padding: 8px 38px;
 	background-color: black;
 	color: white;
@@ -98,7 +98,7 @@
 }
 
 .content_flow {
-		
+
 }
 
 
@@ -125,7 +125,7 @@
 
 .ceil_content_flow {
 	margin: 50px 0;
-	
+
 }
 
 
@@ -142,17 +142,17 @@
 
 .button_to_complie_article_over {
 	border-color: black;
-	background-color: white;	
-	display: inline-block;	
+	background-color: white;
+	display: inline-block;
 	padding: 5px 10px;
 }
 
-.button_to_complie_article {	
-				display: inline-block;			 	
-			 	border: 1px solid #000000;
-				background-color: white;
-				color:black;
-				padding: 5px 10px;
+.button_to_complie_article {
+	display: inline-block;
+	border: 1px solid #000000;
+	background-color: white;
+	color:black;
+	padding: 5px 10px;
 }
 
 .title_article {
@@ -173,11 +173,11 @@
 
 #btn_to_head {
 	position: fixed;
-    bottom: 18px;
-    right: 37px;
+	bottom: 18px;
+	right: 37px;
 	border: 1px solid #000000;
-	padding: 0 3px;	
-    display: none;
+	padding: 0 3px;
+	display: none;
 }
 
 #btn_to_back {
@@ -209,3 +209,30 @@
 #panel_info {
 	display: none;
 }
+
+#btn_to_edit {
+	position: fixed;
+	bottom: 18px;
+	right: 37px;
+	border: 1px solid #000000;
+	padding: 0 3px;
+	display: none;
+}
+
+a:link {
+	color:#191818;
+	text-decoration:none;
+}
+a:visited {
+	color:#525252;
+	text-decoration:none;
+}
+a:hover {
+	color:#000000;
+	text-decoration:underline;
+}
+a:active {
+	color:#000000;
+	text-decoration:none;
+}
+

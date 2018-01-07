@@ -26,22 +26,22 @@ public class WorkListController {
     @RequestMapping("jumpToWorkList")
     public void  jumpToMianPage(String ownerId, HttpServletResponse response, HttpSession httpSession) throws IOException {
         log.info("--归档页跳转处理：start");
-        List<WorkListItem> workList;
+        Map<String,Object> workListMap;
         UserTemp userTemp;
         if(ownerId==null){
             log.info("--访问类型为：master");
             ownerId = (String)httpSession.getAttribute("userId");
             httpSession.setAttribute("visitType","master");
-            workList = workListService.getWorkListByOwnerId(ownerId,httpSession);
+            workListMap = workListService.getWorkListMapByOwnerId(ownerId,httpSession);
             userTemp = workListService.getUserTempByUserId(ownerId,httpSession);
         }else {
             log.info("--访问类型为：visitor");
             httpSession.setAttribute("visitType","visitor");
             httpSession.setAttribute("ownerId",ownerId);
-            workList = workListService.getWorkListByOwnerId(ownerId,httpSession);
+            workListMap = workListService.getWorkListMapByOwnerId(ownerId,httpSession);
             userTemp = workListService.getUserTempByUserId(ownerId,httpSession);
         }
-        httpSession.setAttribute("workList",workList);
+        httpSession.setAttribute("workListMap",workListMap);
         httpSession.setAttribute("userTemp",userTemp);
         log.info("--归档页跳转处理：end");
         response.sendRedirect("../workList.html");
@@ -56,12 +56,12 @@ public class WorkListController {
 
         String visitType = (String) httpSession.getAttribute("visitType");
         String ownerId = (String)httpSession.getAttribute("ownerId");
-        List<WorkListItem> workList = ( List<WorkListItem>)httpSession.getAttribute("workList");
+        Map<String,Object> workListMap = (Map<String,Object>)httpSession.getAttribute("workListMap");
         UserTemp userTemp = (UserTemp)httpSession.getAttribute("userTemp");
 
         resultMap.put("visitType",visitType);
         resultMap.put("ownerId",ownerId);
-        resultMap.put("workList",workList);
+        resultMap.put("workListMap",workListMap);
         resultMap.put("userTemp",userTemp);
 
         log.info("-----归档页初始化：end");

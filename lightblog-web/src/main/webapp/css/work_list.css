@@ -1,0 +1,45 @@
+@charset "utf-8";
+/* CSS Document */
+
+#sum_work {
+    font-weight: 700;
+
+}
+
+.block_ceil_list_work_year {
+    margin-top: 20px;
+}
+
+.div_year {
+    margin-bottom: 10px;
+}
+
+.div_month {
+    margin-bottom: 5px;
+}
+
+.item_list_work {
+    font-size: 15px;
+    margin-top: 15px;
+}
+
+#num_brow {
+    margin-left: 10px;
+    font-size: 13px;
+}
+a:link {
+    color:#191818;
+    text-decoration:none;
+}
+a:visited {
+    color:#525252;
+    text-decoration:none;
+}
+a:hover {
+    color:#000000;
+    text-decoration:underline;
+}
+a:active {
+    color:#000000;
+    text-decoration:none;
+}
