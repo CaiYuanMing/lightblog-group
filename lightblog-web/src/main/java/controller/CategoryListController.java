@@ -62,7 +62,7 @@ public class CategoryListController {
         resultMap.put("categoryMap",categoryMap);
         resultMap.put("userTemp",userTemp);
 
-        log.info("-----归档页初始化：end");
+        log.info("-----分类页初始化：end");
         return resultMap;
     }
 }

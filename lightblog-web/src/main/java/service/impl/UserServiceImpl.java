@@ -37,4 +37,9 @@ public class UserServiceImpl implements UserService {
         log.info("----usertemp获取处理：end");
         return userTemp;
     }
+
+    public String getUserNameByUserId(String userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        return user.getUserName();
+    }
 }

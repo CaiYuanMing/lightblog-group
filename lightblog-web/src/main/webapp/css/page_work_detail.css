@@ -1,0 +1,62 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+#content_main {
+	background-color: white;
+}
+
+#container_toc {
+	background-color: #272727;
+	color: white;
+	height: 100%;
+	width: 338px;
+	position: fixed;
+	right: 0;
+	top: 0;
+}
+
+#toc_togggle {
+	position: fixed;
+	bottom: 72px;
+	right: 37px;
+	border: 1px solid #000000;
+	padding: 0 3px;
+	background-color: black;
+	color: #FFFFFF;
+
+}
+
+#btn_to_re_edit {
+	position: fixed;
+	bottom: 45px;
+	right: 37px;
+	border: 1px solid #000000;
+	padding: 0 3px;
+	background-color: black;
+	color: #FFFFFF;
+}
+
+#container_work {
+	padding-top: 30px;
+	width: 80%;
+}
+
+#content_article {
+	margin-top: 20px;
+}
+
+#val_workId {
+	display: none;
+}
+
+#btn_to_head_black {
+	position: fixed;
+	bottom: 18px;
+	right: 37px;
+	border: 1px solid #000000;
+	padding: 0 3px;
+	background-color: black;
+	color: #FFFFFF;
+	display: none;
+}

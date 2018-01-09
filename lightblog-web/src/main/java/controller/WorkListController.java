@@ -67,4 +67,14 @@ public class WorkListController {
         log.info("-----归档页初始化：end");
         return resultMap;
     }
+
+    @RequestMapping("listByCategory")
+    @ResponseBody
+    public Map<String,Object> listByCategory(String userId,String category,HttpSession httpSession){
+        if(userId==null||userId.equals("")) {
+            log.info("--访问类型为：master");
+            userId = (String) httpSession.getAttribute("userId");
+        }
+        return workListService.getWorkInfoByCategory(userId,category,httpSession);
+    }
 }

@@ -11,6 +11,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import pojo.*;
 import service.UserService;
 import service.WorkListService;
+import service.WorkService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -24,6 +25,8 @@ public class WorkListServiceImpl implements WorkListService {
     private WorkInfoMapper workInfoMapper;
     @Autowired
     private UserService userService;
+    @Autowired
+    private WorkService workService;
 
     public  Map<String,Object> getWorkListMapByOwnerId(String ownerId, HttpSession httpSession) {
         log.info("根据ownerId获取workList : start");
@@ -117,5 +120,9 @@ public class WorkListServiceImpl implements WorkListService {
 
     public UserTemp getUserTempByUserId(String userId,HttpSession httpSession) {
        return userService.getUserTempByUserId(userId,httpSession);
+    }
+
+    public Map<String, Object> getWorkInfoByCategory(String userId, String category, HttpSession httpSession) {
+        return workService.getWorkInfoByCategory(userId,category,httpSession);
     }
 }

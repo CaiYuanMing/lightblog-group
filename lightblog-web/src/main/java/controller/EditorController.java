@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import pojo.WorkTemp;
+import service.UserService;
 import service.WorkService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +25,59 @@ import java.util.Map;
 @Controller
 @RequestMapping("editor")
 public class EditorController {
-    private  static Logger log = Logger.getLogger(RegisterController.class);
+    private  static Logger log = Logger.getLogger(EditorController.class);
     private  int count = 0;
     @Autowired
     private WorkService workService;
+    @Autowired
+    private UserService userService;
+
+    @RequestMapping("reEdit")
+    public void  reEdit(String workId, HttpServletResponse response, HttpSession httpSession) throws IOException {
+        log.info("--文章重编辑跳转处理：start");
+        WorkTemp workTempForReEdit = workService.getWorkDetailByWorkId(workId,httpSession);
+        httpSession.setAttribute("editType","reEdit");
+        httpSession.setAttribute("workTempForReEdit",workTempForReEdit);
+        log.info("----文章重编辑跳转处理：end");
+        response.sendRedirect("../editPage.html");
+    }
+
+    @RequestMapping("aboutEdit")
+    public void  aboutEdit(HttpServletResponse response, HttpSession httpSession) throws IOException {
+        log.info("--关于页编辑跳转处理：start");
+        String AboutContentMarkdown = workService.getAboutMarkdown(httpSession);
+        httpSession.setAttribute("editType","aboutEdit");
+        httpSession.setAttribute("AboutContentMarkdown",AboutContentMarkdown);
+        log.info("----关于页编辑跳转处理：end");
+        response.sendRedirect("../editPage.html");
+    }
+
+    @RequestMapping("init")
+    @ResponseBody
+    public Map<String,Object> init(HttpSession httpSession){
+        log.info("-----编辑页初始化：start");
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+        String editType = (String) httpSession.getAttribute("editType");
+
+        if(editType.equals("reEdit")){
+            log.info("--判断是重编辑");
+            WorkTemp workTempForReEdit = (WorkTemp)httpSession.getAttribute("workTempForReEdit");
+            resultMap.put("workTempForReEdit",workTempForReEdit);
+        }else if (editType==null){
+            log.info("--判断是新编辑");
+            editType = "newEdit";
+        }else {
+            log.info("--判断是编辑关于页");
+            String aboutContentMarkdown =   (String) httpSession.getAttribute("AboutContentMarkdown");
+            String userName = (String) httpSession.getAttribute("userName");
+            resultMap.put("aboutContentMarkdown",aboutContentMarkdown);
+            resultMap.put("userName",userName);
+        }
+        resultMap.put("editType",editType);
+        log.info("-----编辑页初始化：end");
+        return resultMap;
+    }
+
     @RequestMapping("saveWork")
     @ResponseBody
     public Map<String,Object> saveWork(String workTitle, String workCategory, String tag_string, String workContentMarkdown, String workContentHtml, HttpSession httpSession){
@@ -59,7 +109,8 @@ public class EditorController {
 
         }else if (editType.equals("reEdit")){
             log.info("--再编辑文章处理:start");
-            workId = Integer.parseInt(httpSession.getAttribute("workId").toString());
+            WorkTemp workTemp = (WorkTemp)httpSession.getAttribute("workTempForReEdit");
+            workId = workTemp.workId;
             count = workService.updateWorkInfo(workId,workCategory,workTitle);
             count += workService.updateWorkContent(workId,workContentMarkdown,workContentHtml);
             workService.tagEdit(workId,tagList,httpSession);
@@ -131,7 +182,7 @@ public class EditorController {
         String userId = (String) httpSession.getAttribute("userId");
         count = workService.updateAbout(userId,workContentMarkdown,workContentHtml);
 
-        if (count>1){
+        if (count==1){
             resultMap.put("outcome","success");
         }else{
             resultMap.put("outcome","fail");

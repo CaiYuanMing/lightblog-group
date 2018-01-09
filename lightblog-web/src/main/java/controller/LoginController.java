@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 import pojo.UserExample;
 import service.LoginService;
+import service.UserService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,8 @@ import java.util.Map;
 public class LoginController {
     @Autowired
     private LoginService loginService;
+    @Autowired
+    private UserService userService;
 
 
     static Logger log = Logger.getLogger(LoginService.class);
@@ -67,6 +70,7 @@ public class LoginController {
         if (loginService.isUserExistForLg(userExample)){
             resultMap.put("outcome","success");
             httpSession.setAttribute("userId",userId);
+            httpSession.setAttribute("userName",userService.getUserNameByUserId(userId));
             log.info("用户id密码匹配校验: 匹配");
         }else {
             resultMap.put("outcome","fail");

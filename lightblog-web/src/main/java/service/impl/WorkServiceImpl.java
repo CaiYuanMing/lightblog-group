@@ -7,9 +7,12 @@ import mapper.WorkInfoMapper;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import pojo.*;
+import service.AboutService;
+import service.WorkDetailService;
 import service.WorkService;
 
 import javax.servlet.ServletContext;
@@ -18,7 +21,7 @@ import java.util.*;
 
 @Service
 public class WorkServiceImpl implements WorkService {
-    static Logger log = Logger.getLogger(WorkServiceImpl.class);
+    private static Logger log = Logger.getLogger(WorkServiceImpl.class);
     int count;
     @Autowired
     private WorkInfo workInfo;
@@ -36,6 +39,10 @@ public class WorkServiceImpl implements WorkService {
     private  About about;
     @Autowired
     private AboutMapper aboutMapper;
+    @Autowired
+    private WorkDetailService workDetailService;
+    @Autowired
+    private AboutService aboutService;
 //work_info表-CRUD
     //插入
     public int insertWorkInfo(String workUserId,String workCategory,String workTitle) {
@@ -90,7 +97,36 @@ public class WorkServiceImpl implements WorkService {
         return count;
     }
 
-    public String getCategoryTip(String query,HttpSession httpSession) {
+    public Map<String, Object> getWorkInfoByCategory(String userId, String category,HttpSession httpSession) {
+        log.info("--根据userid category 获取所有相关文章相关信息: start");
+        List<Map<String, Object>> workList = new ArrayList<Map<String, Object>>();
+        Map<String,Object> workInfoMap;
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+        WorkInfoExample workInfoExample = (WorkInfoExample)applicationContext.getBean("workInfoExample");
+        workInfoExample.or().andWorkUserIdEqualTo(userId).andWorkCategoryEqualTo(category);
+        List<WorkInfo> workInfoList = workInfoMapper.selectByExample(workInfoExample);
+        for (WorkInfo workInfo:
+             workInfoList) {
+            workInfoMap = new HashMap<String, Object>();
+            workInfoMap.put("workId",workInfo.getWorkId());
+            workInfoMap.put("workTitle",workInfo.getWorkTitle());
+            workList.add(workInfoMap);
+        }
+
+        log.info("--根据userid category 获取所有相关文章相关信息: end");
+        resultMap.put("categoryName",category);
+        resultMap.put("workList",workList);
+        return resultMap;
+    }
+
+    public WorkTemp getWorkDetailByWorkId(String workId, HttpSession httpSession) {
+        return workDetailService.getWorkDetailByWorkId(workId,httpSession);
+    }
+
+    public String getCategoryTip(String query, HttpSession httpSession) {
         log.info("----分类输入提示处理：start");
         ServletContext sc = httpSession.getServletContext();
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
@@ -217,7 +253,6 @@ public class WorkServiceImpl implements WorkService {
         ServletContext sc = httpSession.getServletContext();
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
         TagWorkExample tagWorkExample = (TagWorkExample)applicationContext.getBean("tagWorkExample");
-
         tagWorkExample.or().andTagNameLike("%"+query+"%");
         List<TagWorkKey> tagWorkKeyList = tagWorkMapper.selectByExample(tagWorkExample);
         Set<String> tagTipSet = new HashSet<String>();
@@ -275,5 +310,9 @@ public class WorkServiceImpl implements WorkService {
         count = aboutMapper.updateByPrimaryKeySelective(about);
         log.info("根据主键更新about表，"+count+"条记录受到影响！");
         return count;
+    }
+
+    public  String getAboutMarkdown(HttpSession httpSession) {
+        return aboutService.getAboutMarkdown(httpSession);
     }
 }

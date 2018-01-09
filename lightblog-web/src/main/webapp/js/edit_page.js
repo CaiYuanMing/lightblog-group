@@ -1,5 +1,5 @@
 // JavaScript Document
-var edit_type =  "edit_new";
+var edit_type =  "newEdit";
 var is_not_null = false;
 var error_message = "";
 var str = "";
@@ -7,6 +7,46 @@ var worning_msg = "";
 var id_input_error_help = "";
 var number_id_input_error_help = 1;
 $(function(){
+    //初始化
+    $.ajax({
+        type: "POST",
+        url: "editor/init",
+        data: {
+            purpose: "init"
+        },
+        dataType: "json",
+        success: function(data){
+            console.log(data);
+            console.log("data.editType ="+data.editType);
+            edit_type = data.editType;
+            if ("reEdit" === data.editType) {
+                console.log("确认是再编辑文章");
+                $("#input_title").val(data.workTempForReEdit.workTitle);
+                $("#input_category").val(data.workTempForReEdit.workCategory);
+                $(".editormd-markdown-textarea").text(data.workTempForReEdit.workContentMarkdown);
+                $.each(data.workTempForReEdit.tagList,function(i,tag){
+                    $.add_tag_to_container_tag(tag);
+                });
+            }else if("aboutEdit" === data.editType){
+                console.log("确认是编辑关于页");
+                $(".form-group").remove();
+                $("#panel_tag").remove();
+                str = '<p class="h3">'+data.userName+',开始编辑关于页</p>';
+                $("#panel_main").prepend(str);
+                if(data.aboutContentMarkdown!=null) {
+                    $(".editormd-markdown-textarea").text(data.aboutContentMarkdown);
+                }
+            }else{
+                console.log("确认是新编辑文章");
+            }
+
+        },
+        error: function(jqXHR){
+            worning_msg = "发生错误：" + jqXHR.status;
+            console.log(worning_msg);
+            $.add_waring_after("#panel_info","alert-danger",worning_msg);
+        },
+    });
     //tooltp初始化
     $("[data-toggle='tooltip']").tooltip();
 
@@ -46,9 +86,7 @@ $(function(){
         },
         items:5, // 设置展示多少条 默认8条
     });
-    //----标签
 
-    //input_tag按回车添加标签
     $(document).on("keydown","#input_tag",function(event){
         if(event.which == "13"){
             console.log("input_tag : enter press ----");
@@ -81,16 +119,18 @@ $(function(){
     $(document).on("click",".label-success",function(){
         $(this).remove();
     });
-    //---返回按钮
+
+    //点击返回，返回上一页
+
     $(document).on("click","#btn_to_back",function(){
-        window.history.back();
+        history.back();
     });
     //---表单
     //点击保存按钮，校验输入是否为空，不为空即保存，并返回保存结果
     $(document).on("click","#button_save",function(){
         console.log("button_save : click ----");
         console.log("-- edit_type = "+edit_type);
-        if (edit_type === "edit_new"||edit_type === "edit_re"){
+        if (edit_type === "newEdit"||edit_type === "reEdit"){
             $.check_is_null();
             if (is_not_null){
                 console.log("--合乎保存条件，进入保存处理");
@@ -142,7 +182,7 @@ $(function(){
                 $("#button_save").removeAttr("disabled");
                 $("#button_save").text("保存");
             }
-        }else if (edit_type === "edit_about"){
+        }else if (edit_type === "aboutEdit"){
             $("#button_save").attr("disabled","disabled");
             $("#button_save").text("正在保存...");
             console.log("--ajax: 保存关于页");
@@ -187,13 +227,15 @@ $.extend({'check_is_null':function(){
         input_category : "分类"
     };
     $("form input").each(function(){
-        if($(this).val().length===0){
-            is_not_null = false;
-            id_null_input = $(this).attr("id");
-            error_message = map_input_key[id_null_input]+"不能为空！";
-            $.status_on_error(this,error_message);
-        }else{
-            is_not_null = true;
+        if($(this).attr("id")!="input_tag"){
+            if($(this).val().length===0){
+                is_not_null = false;
+                id_null_input = $(this).attr("id");
+                error_message = map_input_key[id_null_input]+"不能为空！";
+                $.status_on_error(this,error_message);
+            }else{
+                is_not_null = true;
+            }
         }
     });
 }

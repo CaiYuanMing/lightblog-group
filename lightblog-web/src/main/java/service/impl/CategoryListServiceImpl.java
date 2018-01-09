@@ -58,6 +58,9 @@ public class CategoryListServiceImpl implements CategoryListService {
                 count = 0;
             }
         }
+        categoryListItemMap.put("sum",count);
+        categoryList.add(categoryListItemMap);
+
         resultMap.put("categorySum",categorySum);
         resultMap.put("categoryList",categoryList);
         log.info("---获取分类Map处理：end");

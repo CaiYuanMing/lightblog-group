@@ -5,6 +5,7 @@ import pojo.*;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public interface WorkService {
     int insertWorkInfo(String workUserId,String workCategory,String workTitle);
@@ -13,6 +14,8 @@ public interface WorkService {
     int deleteWorkInfoByPrimaryKey(Integer workId);
     int updateWorkInfoBrowseSum(Integer workId);
     String getCategoryTip(String query,HttpSession httpSession);
+    Map<String,Object> getWorkInfoByCategory(String userId,String category,HttpSession httpSession);
+    WorkTemp getWorkDetailByWorkId(String workId, HttpSession httpSession);
 
     int insertWorkContent(Integer workId, String workContentMarkdown, String workContentHtml);
     int updateWorkContent(Integer workId, String workContentMarkdown, String workContentHtml);
@@ -28,5 +31,5 @@ public interface WorkService {
 
     int insertAbout(String aboutUserId, String aboutContentMarkdown, String aboutContentHtml);
     int updateAbout(String aboutUserId, String aboutContentMarkdown, String aboutContentHtml);
-
+    String getAboutMarkdown(HttpSession httpSession);
 }

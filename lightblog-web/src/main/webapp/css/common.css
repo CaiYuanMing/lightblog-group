@@ -212,11 +212,10 @@
 
 #btn_to_edit {
 	position: fixed;
-	bottom: 18px;
+	bottom: 45px;
 	right: 37px;
 	border: 1px solid #000000;
 	padding: 0 3px;
-	display: none;
 }
 
 a:link {
@@ -239,4 +238,8 @@ a:active {
 
 .margin_botttom_20 {
 	margin-bottom: 20px;
+}
+
+.height_full {
+	height: 100%;
 }

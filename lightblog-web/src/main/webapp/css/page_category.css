@@ -3,11 +3,15 @@
 
 
 #container_category {
-	
+
 }
 
 .categpry_item {
 	display: inline-block;
-	margin-right: 15px;
+	border: 1px solid #000000;
+	background-color: white;
+	color:black;
+	padding: 5px 10px;
 	margin-bottom: 20px;
 }
+.name_category{}

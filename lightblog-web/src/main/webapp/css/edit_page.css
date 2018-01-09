@@ -34,3 +34,11 @@ body { padding-bottom: 70px; }
 }
 
 
+
+#editType {
+	display: none;
+}
+
+#val_workId {
+	display: none;
+}

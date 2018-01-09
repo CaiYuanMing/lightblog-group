@@ -19,7 +19,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("mainpage")
 public class MainPageController {
-    private  static Logger log = Logger.getLogger(RegisterController.class);
+    private  static Logger log = Logger.getLogger(MainPageController.class);
     @Autowired
     private MainPageService mainPageService;
 

@@ -53,26 +53,23 @@ function jump_to_page_about(){
 }
 
 function jump_to_page_workdetail(workId){
-    window.location.href = "/lightblog/workdetail/jumpToWorkDetail?workId="+workId;
+    var ownerId = $(".val_ownerId").text();
+    window.location.href = "/lightblog/workdetail/jumpToWorkDetail?workId="+workId+"&ownerId="+ownerId;
 }
 
-function list_work_by_category(category,id_container_list){
-    var ownerId = $(".val_ownerId").text();
-    console.log("-Ajax:获取ownerId = "+ownerId+" category= "+category+" 的文章列表");
-	$.ajax({
-        type: "POST",
-        url: "worklist/listByCategory",
-        data: {
-            userId: ownerId,
-            category: category
-        },
-        dataType: "json",
-        success: function(data){
-            console.log(data);
-        },
-        error: function(jqXHR){
-            var worning_msg = "发生错误：" + jqXHR.status;
-            alert(worning_msg);
-        },
-    });
-}
+//配置tooltip
+$("[data-toggle='tooltip']").tooltip();
+
+//回到顶部按钮的显示与隐藏
+$(window).scroll(function () {
+    if ($(window).scrollTop() >= 50) {
+        $('#btn_to_head').fadeIn();
+    }
+    else {
+        $('#btn_to_head').fadeOut();
+    }
+});
+
+$('#btn_to_head').click(function () {
+    $('html,body').animate({ scrollTop: 0 }, 500);
+});
