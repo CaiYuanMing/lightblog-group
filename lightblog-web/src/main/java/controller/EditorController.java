@@ -52,26 +52,39 @@ public class EditorController {
         response.sendRedirect("../editPage.html");
     }
 
+    @RequestMapping("newEdit")
+    public void  newEdit(HttpServletResponse response, HttpSession httpSession) throws IOException {
+        log.info("----新文章编辑跳转处理：start");
+
+        httpSession.setAttribute("editType",null);
+
+        log.info("----新文章编辑跳转处理：end");
+        response.sendRedirect("../editPage.html");
+    }
+
     @RequestMapping("init")
     @ResponseBody
     public Map<String,Object> init(HttpSession httpSession){
         log.info("-----编辑页初始化：start");
         Map<String,Object> resultMap = new HashMap<String,Object>();
-        String editType = (String) httpSession.getAttribute("editType");
+        String editType;
 
-        if(editType.equals("reEdit")){
-            log.info("--判断是重编辑");
-            WorkTemp workTempForReEdit = (WorkTemp)httpSession.getAttribute("workTempForReEdit");
-            resultMap.put("workTempForReEdit",workTempForReEdit);
-        }else if (editType==null){
+        if (httpSession.getAttribute("editType")==null) {
             log.info("--判断是新编辑");
             editType = "newEdit";
         }else {
-            log.info("--判断是编辑关于页");
-            String aboutContentMarkdown =   (String) httpSession.getAttribute("AboutContentMarkdown");
-            String userName = (String) httpSession.getAttribute("userName");
-            resultMap.put("aboutContentMarkdown",aboutContentMarkdown);
-            resultMap.put("userName",userName);
+            editType = (String)httpSession.getAttribute("editType");
+            if(editType.equals("reEdit")){
+                log.info("--判断是重编辑");
+                WorkTemp workTempForReEdit = (WorkTemp)httpSession.getAttribute("workTempForReEdit");
+                resultMap.put("workTempForReEdit",workTempForReEdit);
+            }else {
+                log.info("--判断是编辑关于页");
+                String aboutContentMarkdown =   (String) httpSession.getAttribute("AboutContentMarkdown");
+                String userName = (String) httpSession.getAttribute("userName");
+                resultMap.put("aboutContentMarkdown",aboutContentMarkdown);
+                resultMap.put("userName",userName);
+            }
         }
         resultMap.put("editType",editType);
         log.info("-----编辑页初始化：end");

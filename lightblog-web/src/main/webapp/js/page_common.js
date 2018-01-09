@@ -2,8 +2,7 @@
 $(function(){
     //点击写作,跳转至文章编辑页
     $("#btn_to_edit").click(function(){
-
-        window.location.href = "/lightblog/editPage.html";
+        window.location.href = "/lightblog/editor/newEdit";
     });
 });
 function jump_to_page_main(){
@@ -54,7 +53,21 @@ function jump_to_page_about(){
 
 function jump_to_page_workdetail(workId){
     var ownerId = $(".val_ownerId").text();
-    window.location.href = "/lightblog/workdetail/jumpToWorkDetail?workId="+workId+"&ownerId="+ownerId;
+    if(ownerId === ""){
+        window.location.href = "/lightblog/workdetail/jumpToWorkDetail?workId="+workId;
+    }else{
+        window.location.href = "/lightblog/workdetail/jumpToWorkDetail?workId="+workId+"&ownerId="+ownerId;
+    }
+
+}
+
+function jump_to_page_search() {
+    var ownerId = $(".val_ownerId").text();
+    if(ownerId === ""){
+        window.location.href = "/lightblog/search/jumpToSearch";
+    }else{
+        window.location.href = "/lightblog/search/jumpToSearch?ownerId="+ownerId;
+    }
 }
 
 //配置tooltip

@@ -1,6 +1,31 @@
 // JavaScript Document
 $(function(){
 	var str;
+    //初始化页面
+    $.ajax({
+        type: "POST",
+        url: "search/init",
+        data: {
+            purpose: "init"
+        },
+        dataType: "json",
+        success: function(data){
+            console.log(data);
+            if ("visitor" === data.visitType) {
+                console.log("确认是游客访问，设置visitType = visitor，隐藏所有编辑入口！");
+                visitType = "visitor";
+                $("#btn_to_edit").hide();
+                //将ownerId放入.val_ownerId的dom,便于其他页面的跳转
+                $(".val_ownerId").text(data.ownerId);
+            }console.log("根据接收参数，初始化主页内容");
+            $(".name_owner").text(data.ownerName);
+            $(".introduction_owner").text(data.ownerIntroduction);
+        },
+        error: function(jqXHR){
+            worning_msg = "发生错误：" + jqXHR.status;
+            alert(worning_msg);
+        },
+    });
 	//分类输入框，输入提示
     $('#input_search').typeahead({
         source: function (query, process) {

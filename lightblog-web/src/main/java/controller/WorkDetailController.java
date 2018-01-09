@@ -37,12 +37,14 @@ public class WorkDetailController {
 
     @RequestMapping("jumpToWorkDetail")
     public void  jumpToWorkDetail(String ownerId,String workId, HttpServletResponse response, HttpSession httpSession) throws IOException {
+
         WorkTemp workTemp = workDetailService.getWorkDetailByWorkId(workId,httpSession);
         if(ownerId==null){
             log.info("--访问类型为：master");
             httpSession.setAttribute("visitType","master");
         }else {
             log.info("--访问类型为：visitor");
+            log.info("ownerId = "+ownerId);
             httpSession.setAttribute("visitType","visitor");
           }
         httpSession.setAttribute("workTemp",workTemp);
