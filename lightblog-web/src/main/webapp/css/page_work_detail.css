@@ -30,11 +30,12 @@
 #btn_to_re_edit {
 	position: fixed;
 	bottom: 45px;
-	right: 37px;
+	right: 91px;
 	border: 1px solid #000000;
 	padding: 0 3px;
 	background-color: black;
 	color: #FFFFFF;
+	display: none;
 }
 
 #container_work {
@@ -59,4 +60,25 @@
 	background-color: black;
 	color: #FFFFFF;
 	display: none;
+}
+
+#btn_to_delete {
+	position: fixed;
+	bottom: 45px;
+	right: 64px;
+	border: 1px solid #000000;
+	padding: 0 3px;
+	background-color: black;
+	color: #FFFFFF;
+	display: none;
+}
+
+#btn_get_menu {
+	position: fixed;
+	bottom: 45px;
+	right: 37px;
+	border: 1px solid #000000;
+	padding: 0 3px;
+	background-color: black;
+	color: #FFFFFF;
 }

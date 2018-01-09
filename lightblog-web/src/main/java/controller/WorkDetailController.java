@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pojo.WorkTemp;
 import service.WorkDetailService;
+import service.WorkService;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,6 +21,8 @@ public class WorkDetailController {
     private  static Logger log = Logger.getLogger(WorkDetailController.class);
     @Autowired
     private WorkDetailService workDetailService;
+    @Autowired
+    private WorkService workService;
     @RequestMapping("init")
     @ResponseBody
     public Map<String,Object> init(HttpSession httpSession){
@@ -49,5 +52,15 @@ public class WorkDetailController {
           }
         httpSession.setAttribute("workTemp",workTemp);
         response.sendRedirect("../workDetail.html");
+    }
+
+    @RequestMapping("deleteWorkById")
+    @ResponseBody
+    public Map<String,Object> userIdCheck(String workId,HttpSession httpSession){
+        log.info("----文章删除处理：start");
+        log.info("workId = "+workId);
+        Map<String,Object> resultMap = workDetailService.deleteWorkById(workId,httpSession);
+        log.info("----文章删除处理：end");
+        return resultMap;
     }
 }

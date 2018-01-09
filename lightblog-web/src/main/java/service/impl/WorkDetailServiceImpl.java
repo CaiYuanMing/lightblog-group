@@ -12,11 +12,14 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import pojo.*;
 
 import service.WorkDetailService;
+import service.WorkService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class WorkDetailServiceImpl implements WorkDetailService {
@@ -29,6 +32,8 @@ public class WorkDetailServiceImpl implements WorkDetailService {
     private UserMapper userMapper;
     @Autowired
     private TagWorkMapper tagWorkMapper;
+    @Autowired
+    private WorkService workService;
     public WorkTemp getWorkDetailByWorkId(String workId, HttpSession httpSession) {
         log.info("通过workId获取workDetail处理：start");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -63,5 +68,24 @@ public class WorkDetailServiceImpl implements WorkDetailService {
         }
         log.info("通过workId获取workDetail处理：end");
         return workTemp;
+    }
+
+    public Map<String, Object> deleteWorkById(String workId, HttpSession httpSession) {
+        log.info("删除文章：start workId="+workId);
+        int workInfoCount = workService.deleteWorkInfoByPrimaryKey(Integer.parseInt(workId));
+//        int workContentCount = workService.deleteWorkContentByPrimaryKey(Integer.parseInt(workId));
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+//        ServletContext sc = httpSession.getServletContext();
+//        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+//        TagWorkExample tagWorkExample = (TagWorkExample)applicationContext.getBean("tagWorkExample");
+//        tagWorkExample.or().andWorkIdEqualTo(Integer.parseInt(workId));
+//        int tagWorkCount = workService.deleteTagWorkByExample(tagWorkExample);
+        if(workInfoCount==1){
+            resultMap.put("outcome","success");
+        }else {
+            resultMap.put("outcome","fail");
+            resultMap.put("msg","系统故障，删除失败！");
+        }
+        return resultMap;
     }
 }

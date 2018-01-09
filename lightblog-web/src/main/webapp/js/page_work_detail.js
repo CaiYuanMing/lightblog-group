@@ -59,11 +59,50 @@ $(function(){
         $("#container_toc").fadeToggle(100);
 
     });
+    //删除后回到主页
+
+    $(document).on("click","#btn_to_home",function(){
+        window.location.href = "/lightblog/mainpage/jumpToMianPage";
+    });
+
     //重新编辑文章
     $("#btn_to_re_edit").click(function(){
         var workId = $("#val_workId").text();
         window.location.href = "/lightblog/editor/reEdit?workId="+workId;
     });
+
+
+    $("#btn_delete_work").click(function(){
+        str = '<button id="btn_delete_work" type="button" class="btn btn-warning btn-block" disabled="disabled">正在删除</button>';
+        $("#foot_modal_delete").html(str);
+        $.ajax({
+            type: "POST",
+            url: "workdetail/deleteWorkById",
+            data: {
+                workId: $("#val_workId").text()
+            },
+            dataType: "json",
+            success: function(data){
+                console.log(data);
+                if ("success" === data.outcome) {
+                    str = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>文章删除成功！';
+                    $("#body_modal_delete").html(str);
+                    str = '<button id="btn_to_home" type="button" class="btn btn-success btn-block"">回到主页</button>';
+                    $("#foot_modal_delete").html(str);
+                } else {
+                    str = '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>文章删除失败'+data.msg;
+                    $("#body_modal_delete").html(str);
+                    str = '<button id="btn_to_home" type="button" class="btn btn-success btn-block"">回到主页</button>';
+                    $("#foot_modal_delete").html(str);
+                }
+            },
+            error: function(jqXHR){
+                worning_msg = "发生错误：" + jqXHR.status;
+                alert(worning_msg);
+            },
+        });
+    });
+
     //回到顶部按钮的显示与隐藏
     $(window).scroll(function (){
         if ($(window).scrollTop() >= 50) {
@@ -76,5 +115,10 @@ $(function(){
     //点击回到顶部，回到顶部
     $('#btn_to_head_black').click(function () {
         $('html,body').animate({ scrollTop: 0 }, 500);
+    });
+    //点击菜单，弹出菜单（编辑/删除）
+    $('#btn_get_menu').click(function () {
+        $('#btn_to_delete').fadeToggle(300);
+        $('#btn_to_re_edit').fadeToggle(500);
     });
 });
