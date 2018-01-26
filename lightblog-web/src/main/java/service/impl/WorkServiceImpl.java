@@ -50,6 +50,7 @@ public class WorkServiceImpl implements WorkService {
         workInfo.setWorkId(null);
         workInfo.setWorkUserId(workUserId);
         workInfo.setWorkGeneratesTime(new Date());
+        workCategory = workCategory.trim();
         workInfo.setWorkCategory(workCategory);
         workInfo.setWorkBrowseSum(0);
         workInfo.setWorkTitle(workTitle);
@@ -63,6 +64,7 @@ public class WorkServiceImpl implements WorkService {
         workInfo.setWorkId(workId);
         workInfo.setWorkUserId(null);
         workInfo.setWorkGeneratesTime(null);
+        workCategory = workCategory.trim();
         workInfo.setWorkCategory(workCategory);
         workInfo.setWorkBrowseSum(null);
         workInfo.setWorkTitle(workTitle);
@@ -205,6 +207,7 @@ public class WorkServiceImpl implements WorkService {
     //插入
     public int insertTagWork(String tagName, Integer workId) {
         log.info("insertTagWork接收参数： tagName = "+tagName+"\n workId = "+workId);
+        tagName = tagName.trim();
         tagWorkKey.setTagName(tagName);
         tagWorkKey.setWorkId(workId);
         count = tagWorkMapper.insert(tagWorkKey);
@@ -263,7 +266,12 @@ public class WorkServiceImpl implements WorkService {
         List<String> tagTipList = new ArrayList<String>(tagTipSet);
         //结果按规范封装
         StringBuffer tagTips = new StringBuffer("");
+        for (String str:
+            tagTipSet ) {
+            System.out.println(str);
+        }
         for (int i = 0; i < tagTipList.size(); i++) {
+
             if (i==0){
                 if (i==tagTipList.size()-1){
                     tagTips.append("[\"");
