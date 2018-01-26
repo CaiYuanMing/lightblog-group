@@ -51,6 +51,7 @@ public class WorkListServiceImpl implements WorkListService {
         ServletContext sc = httpSession.getServletContext();
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
         WorkInfoExample workInfoExample = (WorkInfoExample)applicationContext.getBean("workInfoExample");
+        workInfoExample.setOrderByClause("work_generates_time desc");
         workInfoExample.or().andWorkUserIdEqualTo(ownerId);
         List<WorkInfo> workInfoList = workInfoMapper.selectByExample(workInfoExample);
 
@@ -75,7 +76,8 @@ public class WorkListServiceImpl implements WorkListService {
                 monthMap.put("monthNumber",monthNumber);
                 monthMapNumber = monthNumber;
             }else if (yeahNumber.equals(yeahMapNumber)){//同年
-                    if (!monthNumber.equals(monthMapNumber)){//同年不同月，整理提交上个月，再开新月，放入文章，即把上个月提交到月map,再将操作的月map放入年list，新建一个
+                    if (!monthNumber.equals(monthMapNumber)){//同年不同月，整理提交上个月，再开新月，放入文章，
+                        // 即把上个月提交到月map,再将操作的月map放入年list，新建一个
                         monthMap.put("dayList",workDayList);
                         workMonthList.add(monthMap);
                         //创建新的monthMap
@@ -92,7 +94,7 @@ public class WorkListServiceImpl implements WorkListService {
                 workMapList.add(yearMap);
                 //创建新的yearMap
                 yearMap = new HashMap<String,Object>();
-                yearMap.put("yeahNumber",yeahNumber);
+                yearMap.put("yearNumber",yeahNumber);
                 yeahMapNumber = yeahNumber;
 
                 //创建新的以年为单位收集月map(monthMap)的List

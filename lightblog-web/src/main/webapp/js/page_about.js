@@ -32,6 +32,7 @@ $(function(){
                 $("#content_article").html(str);
             }else{
                 $("#content_article").html(data.aboutContentHtml);
+				$("div#content_article img").addClass("img-responsive");
             }
 
         },

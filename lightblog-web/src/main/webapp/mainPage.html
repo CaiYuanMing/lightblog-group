@@ -126,6 +126,7 @@
                     console.info("标签处理：str_tag = "+str_tag);
                     str = '	<div class="row"><div class="content_flow col-md-6 col-md-offset-3 col-xs-12 "><div class="ceil_content_flow text-center"><div class="id_article_for_dispatcher">'+work.workId+'</div><div class="head_ceil_content_flow"><div class="title_article">'+work.workTitle+'</div><div class="info_article text-muted"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp;'+work.workGeneratesTime+'&nbsp;&nbsp;|<span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp;分类于 '+work.workCategory+'&nbsp;&nbsp;|<span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>&nbsp;浏览'+work.workBrowseSum+'次 </div></div><div id="content_article_"'+i+' class="content_article text-justify">'+work.workContentHtml+'</div><div class="tag_article text-center">'+str_tag+'</div><div class="button_to_complie_article">阅读全文>></div></div><hr class="hr_sepa"></div></div>';
                     $("#container_work").append(str);
+					$("div#container_work img").addClass("img-responsive");
                     str = "content_article_"+i;
                     editormd.markdownToHTML("str", {
                         htmlDecode      : "style,script,iframe",  // you can filter tags decode

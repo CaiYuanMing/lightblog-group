@@ -28,6 +28,7 @@ $(function(){
             str = '<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>  '+data.workTemp.workGeneratesTime+' |<span class="glyphicon glyphicon-book" aria-hidden="true"></span> 分类于 '+data.workTemp.workCategory+'  | <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> 浏览'+data.workTemp.workBrowseSum+'次 ';
             $(".info_article").html(str);
             $("#content_article").html(data.workTemp.workContentHtml);
+			$("div#content_article img").addClass("img-responsive");			
             $.each(data.workTemp.tagList,function(i,tag){
                 str = "#"+tag+"  ";
                 $(".tag_article").append(str);

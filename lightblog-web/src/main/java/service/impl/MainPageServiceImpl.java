@@ -43,7 +43,7 @@ public class MainPageServiceImpl implements MainPageService {
         ServletContext sc = httpSession.getServletContext();
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
         WorkInfoExample workInfoExample = (WorkInfoExample)applicationContext.getBean("workInfoExample");
-
+        workInfoExample.setOrderByClause("work_generates_time desc");
         workInfoExample.or().andWorkUserIdEqualTo(ownerId);
         List<WorkInfo> workInfoList = workInfoMapper.selectByExample(workInfoExample);
 

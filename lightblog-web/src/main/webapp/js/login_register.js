@@ -346,6 +346,17 @@ $(function(){
         }
     });
 
+	//输入完毕，按回车键映射到相应登录/注册键点击事件
+   $(document).on("keydown","#input_userpassword_login",function(event){	  
+        if(event.which == 13){ 			
+		 $("#button_login").click();
+	    }
+   });
+   $(document).on("keydown","#input_userpassword_register_check",function(event){	 
+        if(event.which == 13){ 				
+		  $("#button_register").click();		
+	 	}
+   });
 
 });
 ////luosimao人机校验

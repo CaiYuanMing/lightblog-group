@@ -1,7 +1,7 @@
 // JavaScript Document
 //为安全性，默认主页访问模式为游客模式，无法修改主页任何信息
 var str = "";
-$(function(){
+$(function(){	
     $(document).on("mouseenter",".button_to_complie_article",function(){
         $(this).css({
             "display": "inline-block",
