@@ -72,37 +72,103 @@ $(function(){
         window.location.href = "/lightblog/editor/reEdit?workId="+workId;
     });
 
-
-    $("#btn_delete_work").click(function(){
-        str = '<button id="btn_delete_work" type="button" class="btn btn-warning btn-block" disabled="disabled">正在删除</button>';
-        $("#foot_modal_delete").html(str);
-        $.ajax({
-            type: "POST",
-            url: "workdetail/deleteWorkById",
-            data: {
-                workId: $("#val_workId").text()
-            },
-            dataType: "json",
-            success: function(data){
-                console.log(data);
-                if ("success" === data.outcome) {
-                    str = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>文章删除成功！';
-                    $("#body_modal_delete").html(str);
-                    str = '<button id="btn_to_home" type="button" class="btn btn-success btn-block"">回到主页</button>';
-                    $("#foot_modal_delete").html(str);
-                } else {
-                    str = '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>文章删除失败'+data.msg;
-                    $("#body_modal_delete").html(str);
-                    str = '<button id="btn_to_home" type="button" class="btn btn-success btn-block"">回到主页</button>';
-                    $("#foot_modal_delete").html(str);
+    //删除文章
+    $(document).on("click","#btn_to_delete",function(){
+        $.confirm({
+            type: 'orange',
+            title: '删除文章!',
+            content: '这篇文章删除后，无法找回',
+            buttons: {
+                confirm:{
+                    text: '确认',
+                    btnClass: 'btn-orange',
+                    action: function(){
+                        $.confirm({
+                            title: '正在删除',
+                            content: function () {
+                                var self = this;
+                                return $.ajax({
+                                    type: "POST",
+                                    url: "workdetail/deleteWorkById",
+                                    data: {
+                                        workId: $("#val_workId").text()
+                                    },
+                                    dataType: "json"
+                                }).done(function (response) {
+                                    if ("success" === response.outcome) {
+                                        self.setType('green');
+                                        self.buttons.backAction.addClass('btn-green');
+                                        self.setTitle('文章成功删除');
+                                        self.setContent('<h4>结束，是新的开始</h4><br/>conclusion,is to new gambit');
+                                    } else {
+                                        self.setType('red');
+                                        self.buttons.backAction.addClass('btn-red');
+                                        self.setTitle('删除失败');
+                                        self.setContent(response.msg);
+                                    }
+                                    self.setContentAppend('<br/><br/>即将返回主页');
+                                }).fail(function(){
+                                    self.setType('red');
+                                    self.setTitle('删除失败');
+                                    self.setContent('Opp,数据传送出错了..');
+                                    self.setContentAppend('<br/><br/>即将返回主页');
+                                });
+                            },
+                            autoClose: 'backAction|7000',
+                            onDestroy: function () {
+                                // when the modal is removed from DOM
+                                window.location.href = "/lightblog/mainpage/jumpToMianPage";
+                            },
+                            buttons: {
+                                backAction: {
+                                    text: '返回主页',
+                                    action:function () {
+                                        window.location.href = "/lightblog/mainpage/jumpToMianPage";
+                                    }
+                                }
+                            }
+                        });
+                    }
+                },
+                cancel: {
+                    text: '放弃',
+                    btnClass: 'btn-green',
+                    action: function(){
+                    }
                 }
-            },
-            error: function(jqXHR){
-                worning_msg = "发生错误：" + jqXHR.status;
-                alert(worning_msg);
-            },
+            }
         });
     });
+    // $("#btn_delete_work").click(function(){
+    //     str = '<button id="btn_delete_work" type="button" class="btn btn-warning btn-block" disabled="disabled">正在删除</button>';
+    //     $("#foot_modal_delete").html(str);
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "workdetail/deleteWorkById",
+    //         data: {
+    //             workId: $("#val_workId").text()
+    //         },
+    //         dataType: "json",
+    //         success: function(data){
+    //             console.log(data);
+    //             if ("success" === data.outcome) {
+    //                 str = '<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>文章删除成功！';
+    //                 $("#body_modal_delete").html(str);
+    //                 str = '<button id="btn_to_home" type="button" class="btn btn-success btn-block"">回到主页</button>';
+    //                 $("#foot_modal_delete").html(str);
+    //             } else {
+    //                 str = '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>文章删除失败'+data.msg;
+    //                 $("#body_modal_delete").html(str);
+    //                 str = '<button id="btn_to_home" type="button" class="btn btn-success btn-block"">回到主页</button>';
+    //                 $("#foot_modal_delete").html(str);
+    //             }
+    //         },
+    //         error: function(jqXHR){
+    //             worning_msg = "发生错误：" + jqXHR.status;
+    //             alert(worning_msg);
+    //         },
+    //     });
+    // });
 
     //回到顶部按钮的显示与隐藏
     $(window).scroll(function (){

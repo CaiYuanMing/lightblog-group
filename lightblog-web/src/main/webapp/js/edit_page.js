@@ -6,6 +6,17 @@ var str = "";
 var worning_msg = "";
 var id_input_error_help = "";
 var number_id_input_error_help = 1;
+var workId = "";
+var map_prepage_by_edit_type = {
+    newEdit : "主页",
+    reEdit : "文章详情页",
+    aboutEdit : "关于页"
+};
+var map_url_by_edit_type = {
+    newEdit : "/lightblog/mainpage/jumpToMianPage",
+    reEdit : "/lightblog/workdetail/jumpToWorkDetail?workId="+workId,
+    aboutEdit : "/lightblog/about/jumpToAbout"
+};
 $(function(){
     //初始化
     $.ajax({
@@ -21,6 +32,8 @@ $(function(){
             edit_type = data.editType;
             if ("reEdit" === data.editType) {
                 console.log("确认是再编辑文章");
+                workId = data.workTempForReEdit.workId;
+                map_url_by_edit_type["reEdit"] = "/lightblog/workdetail/jumpToWorkDetail?workId="+ workId;
                 $("#input_title").val(data.workTempForReEdit.workTitle);
                 $("#input_category").val(data.workTempForReEdit.workCategory);
                 $(".editormd-markdown-textarea").text(data.workTempForReEdit.workContentMarkdown);
@@ -150,67 +163,167 @@ $(function(){
                 console.log("tag_string = "+tag_string);
                 console.log(tag_count+"个标签保存到tag_string");
                 console.log("--ajax: 保存文章");
-                $.ajax({
-                    type: "POST",
-                    url: "editor/saveWork",
-                    data: {
-                        workTitle: $("#input_title").val(),
-                        workCategory: $("#input_category").val(),
-                        tag_string : tag_string,
-                        workContentMarkdown : $(".editormd-markdown-textarea").val(),
-                        workContentHtml : $(".editormd-html-textarea").val()
+                $.confirm({
+                    title: '正在保存',
+                    content: function () {
+                        var self = this;
+                        return $.ajax({
+                            type: "POST",
+                            url: "editor/saveWork",
+                            data: {
+                                workTitle: $("#input_title").val(),
+                                workCategory: $("#input_category").val(),
+                                tag_string : tag_string,
+                                workContentMarkdown : $(".editormd-markdown-textarea").val(),
+                                workContentHtml : $(".editormd-html-textarea").val()
+                            },
+                            dataType: "json"
+                        }).done(function (response) {
+                            if ("success" === response.outcome) {
+                                self.setType('green');
+                                self.buttons.backAction.addClass('btn-green');
+                                self.setTitle('保存成功');
+                                self.setContent('<h4>新文章，新收获</h4>');
+                                self.setContentAppend('new post,new gain');
+                            } else {
+                                self.setType('red');
+                                self.setTitle('保存失败');
+                                self.setContent(response.msg);
+                            }
+                            self.setContentAppend('<br/><br/>即将返回'+map_prepage_by_edit_type[edit_type]);
+                        }).fail(function(){
+                            self.setType('red');
+                            self.setTitle('保存失败');
+                            self.setContent('Opp,数据传送出错了..');
+                            self.setContentAppend('<br/><br/>即将返回'+map_prepage_by_edit_type[edit_type]);
+                        });
                     },
-                    dataType: "json",
-                    success: function(data){
-                        if ("success" === data.outcome) {
-                            worning_msg = "<strong>文章保存成功！</strong>";
-                            $.add_waring_after("#panel_info","alert-success",worning_msg);
-                            $("input").val("");
-                            $("#container_tag").children(".label-success").remove();
-                            $.recover_on_focus( $("input"));
-                            $(".editormd-markdown-textarea").val("");
-                        } else {
-                            worning_msg = "<strong>文章保存失败！</strong> "+data.msg;
-                            $.add_waring_after("#panel_info","alert-success",worning_msg);
+                    autoClose: 'backAction|7000',
+                    onDestroy: function () {
+                        // when the modal is removed from DOM
+                        var url = map_url_by_edit_type[edit_type];
+                        window.location.href = url;
+                    },
+                    buttons: {
+                        backAction: {
+                            text: '退出编辑页',
+                            action:function () {
+                                var url = map_url_by_edit_type[edit_type];
+                                window.location.href = url;
+                            }
                         }
-                    },
-                    error: function(jqXHR){
-                        worning_msg = "发生错误：" + jqXHR.status;
-                        $.add_waring_after("#panel_info","alert-danger",worning_msg);
-                    },
+                    }
                 });
-                $("#button_save").removeAttr("disabled");
-                $("#button_save").text("保存");
+                // $.ajax({
+                //     type: "POST",
+                //     url: "editor/saveWork",
+                //     data: {
+                //         workTitle: $("#input_title").val(),
+                //         workCategory: $("#input_category").val(),
+                //         tag_string : tag_string,
+                //         workContentMarkdown : $(".editormd-markdown-textarea").val(),
+                //         workContentHtml : $(".editormd-html-textarea").val()
+                //     },
+                //     dataType: "json",
+                //     success: function(data){
+                //         if ("success" === data.outcome) {
+                //             worning_msg = "<strong>文章保存成功！</strong>";
+                //             $.add_waring_after("#panel_info","alert-success",worning_msg);
+                //             $("input").val("");
+                //             $("#container_tag").children(".label-success").remove();
+                //             $.recover_on_focus( $("input"));
+                //             $(".editormd-markdown-textarea").val("");
+                //         } else {
+                //             worning_msg = "<strong>文章保存失败！</strong> "+data.msg;
+                //             $.add_waring_after("#panel_info","alert-success",worning_msg);
+                //         }
+                //     },
+                //     error: function(jqXHR){
+                //         worning_msg = "发生错误：" + jqXHR.status;
+                //         $.add_waring_after("#panel_info","alert-danger",worning_msg);
+                //     },
+                // });
+                // $("#button_save").removeAttr("disabled");
+                // $("#button_save").text("保存");
             }
         }else if (edit_type === "aboutEdit"){
             $("#button_save").attr("disabled","disabled");
             $("#button_save").text("正在保存...");
             console.log("--ajax: 保存关于页");
-            $.ajax({
-                type: "POST",
-                url: "editor/saveAbout",
-                data: {
-                    workContentMarkdown : $(".editormd-markdown-textarea").val(),
-                    workContentHtml : $(".editormd-html-textarea").val()
+            $.confirm({
+                title: '正在保存',
+                content: function () {
+                    var self = this;
+                    return $.ajax({
+                        type: "POST",
+                        url: "editor/saveAbout",
+                        data: {
+                            workContentMarkdown : $(".editormd-markdown-textarea").val(),
+                            workContentHtml : $(".editormd-html-textarea").val()
+                        },
+                        dataType: "json"
+                    }).done(function (response) {
+                        if ("success" === response.outcome) {
+                            self.setType('green');
+                            self.buttons.backAction.addClass('btn-green');
+                            self.setTitle('保存成功');
+                            self.setContent('<h4>新介绍，新定位</h4>');
+                            self.setContentAppend('new introduction,new position');
+                        } else {
+                            self.setType('red');
+                            self.buttons.backAction.addClass('btn-red');
+                            self.setTitle('保存失败');
+                            self.setContent(response.msg);
+                        }
+                        self.setContentAppend('<br/><br/>即将返回'+map_prepage_by_edit_type[edit_type]);
+                    }).fail(function(){
+                        self.setType('red');
+                        self.setTitle('保存失败');
+                        self.setContent('Opp,数据传送出错了..');
+                        self.setContentAppend('<br/><br/>即将返回'+map_prepage_by_edit_type[edit_type]);
+                    });
                 },
-                dataType: "json",
-                success: function(data){
-                    if ("success" === data.outcome) {
-                        worning_msg = "<strong>关于页保存成功！</strong>";
-                        $.add_waring_after("#panel_info","alert-success",worning_msg);
-                        $(".editormd-markdown-textarea").val("");
-                    } else {
-                        worning_msg = "<strong>关于页保存失败！</strong> "+data.msg;
-                        $.add_waring_after("#panel_info","alert-success",worning_msg);
+                autoClose: 'backAction|7000',
+                onDestroy: function () {
+                    // when the modal is removed from DOM
+                    var url = map_url_by_edit_type[edit_type];
+                    window.location.href = url;
+                },
+                buttons: {
+                    backAction: {
+                        text: '退出编辑页',
+                        action:function () {
+                            var url = map_url_by_edit_type[edit_type];
+                            window.location.href = url;
+                        }
                     }
-                },
-                error: function(jqXHR){
-                    worning_msg = "发生错误：" + jqXHR.status;
-                    $.add_waring_after("#panel_info","alert-danger",worning_msg);
-                },
+                }
             });
-            $("#button_save").removeAttr("disabled");
-            $("#button_save").text("保存");
+            // $.ajax({
+            //     type: "POST",
+            //     url: "editor/saveAbout",
+            //     data: {
+            //         workContentMarkdown : $(".editormd-markdown-textarea").val(),
+            //         workContentHtml : $(".editormd-html-textarea").val()
+            //     },
+            //     dataType: "json",
+            //     success: function(data){
+            //         if ("success" === data.outcome) {
+            //             worning_msg = "<strong>关于页保存成功！</strong>";
+            //             $.add_waring_after("#panel_info","alert-success",worning_msg);
+            //             $(".editormd-markdown-textarea").val("");
+            //         } else {
+            //             worning_msg = "<strong>关于页保存失败！</strong> "+data.msg;
+            //             $.add_waring_after("#panel_info","alert-success",worning_msg);
+            //         }
+            //     },
+            //     error: function(jqXHR){
+            //         worning_msg = "发生错误：" + jqXHR.status;
+            //         $.add_waring_after("#panel_info","alert-danger",worning_msg);
+            //     },
+            // });
+            // $("#button_save").removeAttr("disabled");
+            // $("#button_save").text("保存");
         }
 
     });

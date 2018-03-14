@@ -29,20 +29,34 @@ $(function(){
 
             str = '<div class="row"><div class="col-md-6 col-md-offset-3 col-xs-12"><p class="h4">共计 <span id="sum_work" class="text-success h3">'+data.workListMap.workSum+'</span> 篇 Blog</p><div class="block_ceil_list_work_year"></div></div></div>';
             $("#container_work").append(str);
-
-            $.each(data.workListMap.yearList,function(i,yearMap){
-                str = '<div class="div_year"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span id="number_year" class="h2">  '+yearMap.yearNumber+'</span></div>';
-                $(".block_ceil_list_work_year").append(str);
-
-                $.each(yearMap.monthList,function(i,monthMap){
-                    str = '<div class="div_month"><span class="glyphicon glyphicon-tree-conifer" aria-hidden="true"></span><span id="number_month" class="h3">  '+monthMap.monthNumber+'</span></div>';
+            //
+            // if(data.workListMap.workSum === 0){
+            //
+            //     if("master" === data.visitType){
+            //         str = '<p><span class="h3 text-center">你还没有文章</span><br/>点击右下角的编辑，开始迈出第一步吧</p>';
+            //     }else{
+            //         str = '<p class="h3">博主文章库存为零</p>';
+            //     }
+            //     $("#container_work").append(str);
+            // }else {
+            if (data.workListMap.workSum != 0){
+                $.each(data.workListMap.yearList,function(i,yearMap){
+                    str = '<div class="div_year"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span id="number_year" class="h2">  '+yearMap.yearNumber+'</span></div>';
                     $(".block_ceil_list_work_year").append(str);
-                    $.each(monthMap.dayList,function(i,workListItem){
-                        str = '<div class="item_list_work"><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span><a href="javascript:jump_to_page_workdetail('+workListItem.workId+');">  '+workListItem.workGeneratesTime+' '+workListItem.workTitle+'	</a><span id="num_brow" class="text-muted">浏览 '+workListItem.workBrowseSum+'</span></div><hr/>';
+
+                    $.each(yearMap.monthList,function(i,monthMap){
+                        str = '<div class="div_month"><span class="glyphicon glyphicon-tree-conifer" aria-hidden="true"></span><span id="number_month" class="h3">  '+monthMap.monthNumber+'</span></div>';
                         $(".block_ceil_list_work_year").append(str);
+                        $.each(monthMap.dayList,function(i,workListItem){
+                            str = '<div class="item_list_work"><span class="glyphicon glyphicon-leaf" aria-hidden="true"></span><a href="javascript:jump_to_page_workdetail('+workListItem.workId+');">  '+workListItem.workGeneratesTime+' '+workListItem.workTitle+'	</a><span id="num_brow" class="text-muted">浏览 '+workListItem.workBrowseSum+'</span></div><hr/>';
+                            $(".block_ceil_list_work_year").append(str);
+                        });
                     });
                 });
-            });
+            }
+
+            // }
+
         },
         error: function(jqXHR){
             worning_msg = "发生错误：" + jqXHR.status;

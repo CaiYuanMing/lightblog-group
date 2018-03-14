@@ -4,11 +4,12 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <context id="mysqlgenerator" targetRuntime="MyBatis3">
+
         <!--数据库连接信息-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/lightblog"
                         userId="root"
-                        password="2017cwdn" />
+                        password="cyming" />
         <!--代码相关路径和包-->
         <javaModelGenerator targetPackage="pojo" targetProject="src/main/java" />
         <sqlMapGenerator targetPackage="mapping" targetProject="src/main/resources" />

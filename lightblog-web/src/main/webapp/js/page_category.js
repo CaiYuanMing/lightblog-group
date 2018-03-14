@@ -24,12 +24,25 @@ $(function(){
             $(".name_owner").text(data.userTemp.userName);
             $(".introduction_owner").text(data.userTemp.userIntroduction);
             $("#sum_category").text(" "+data.categoryMap.categorySum+" ");
-            var font_size = 14;
-            $.each(data.categoryMap.categoryList,function(i,categoryListItemMap){
-                font_size += categoryListItemMap.sum*0.5;
-                str = '	<div class="categpry_item" style="font-size:'+font_size+'px">'+categoryListItemMap.categoryName+'</div>';
-                $("#container_category").append(str);
-            });
+            // if(data.categoryMap.categorySum === 0){
+            //
+            //     if("master" === data.visitType){
+            //         str = '<p><span class="h4 text-left">你还没有文章</span><br/>点击右下角的编辑，开始迈出第一步吧</p>';
+            //     }else{
+            //         str = '<p class="h3">博主文章库存为零</p>';
+            //     }
+            //     $("#container_category").append(str);
+            // }else{
+            if(data.categoryMap.categorySum != 0){
+                var font_size = 14;
+                $.each(data.categoryMap.categoryList,function(i,categoryListItemMap){
+                    font_size += categoryListItemMap.sum*0.5;
+                    str = '	<div class="categpry_item" style="font-size:'+font_size+'px">'+categoryListItemMap.categoryName+'</div>';
+                    $("#container_category").append(str);
+                });
+            }
+
+            // }
         },
         error: function(jqXHR){
             worning_msg = "发生错误：" + jqXHR.status;

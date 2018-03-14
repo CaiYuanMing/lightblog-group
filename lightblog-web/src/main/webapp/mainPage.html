@@ -115,7 +115,17 @@
                 }console.log("根据接收参数，初始化主页内容");
                 $(".name_owner").text(data.userTemp.userName);
                 $(".introduction_owner").text(data.userTemp.userIntroduction);
+
                 //初始化文章流
+                if(data.workTempList.length === 0){
+
+                    if("master" === data.visitType){
+                        str = '<p class="text-center"><span class="h3">你还没有文章</span><br/>点击右下角的编辑，开始迈出第一步吧</p>';
+                    }else{
+                        str = '<p class="h3">博主文章库存为零</p>';
+                    }
+                    $("#container_work").append(str);
+                }
                 count = 0;
                 $.each(data.workTempList,function(i,work){
                     //标签处理
