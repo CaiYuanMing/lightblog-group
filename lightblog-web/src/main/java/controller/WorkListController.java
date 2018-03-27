@@ -77,4 +77,14 @@ public class WorkListController {
         }
         return workListService.getWorkInfoByCategory(userId,category,httpSession);
     }
+
+    @RequestMapping("listByTag")
+    @ResponseBody
+    public Map<String,Object> listByTag(String userId,String tag,HttpSession httpSession){
+        if(userId==null||userId.equals("")) {
+            log.info("--访问类型为：master");
+            userId = (String) httpSession.getAttribute("userId");
+        }
+        return workListService.getWorkInfoByTag(userId,tag,httpSession);
+    }
 }

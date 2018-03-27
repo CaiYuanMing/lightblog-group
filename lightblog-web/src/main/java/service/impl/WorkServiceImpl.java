@@ -297,6 +297,38 @@ public class WorkServiceImpl implements WorkService {
         return tagTips.toString();
     }
 
+    public Map<String, Object> getWorkInfoByTag(String userId, String tag, HttpSession httpSession) {
+        log.info("--根据userid = "+userId+" tag = "+tag+"获取所有相关文章相关信息: start");
+        List<Map<String, Object>> workList = new ArrayList<Map<String, Object>>();
+        Map<String,Object> workInfoMap;
+        Map<String,Object> resultMap = new HashMap<String,Object>();
+
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+        //获取使用该标签的文章信息
+        TagWorkExample tagWorkExample = (TagWorkExample)applicationContext.getBean("tagWorkExample");
+        tagWorkExample.or().andTagNameEqualTo(tag);
+        List<TagWorkKey> tagWorkKeyList = tagWorkMapper.selectByExample(tagWorkExample);
+        //获取该作者使用该标签的文章信息
+        for (TagWorkKey tagWorkKey:tagWorkKeyList){
+            WorkInfoExample workInfoExample = (WorkInfoExample)applicationContext.getBean("workInfoExample");
+            workInfoExample.or().andWorkUserIdEqualTo(userId).andWorkIdEqualTo(tagWorkKey.getWorkId());
+            List<WorkInfo> workInfoList = workInfoMapper.selectByExample(workInfoExample);
+
+            for (WorkInfo workInfo:workInfoList) {
+                workInfoMap = new HashMap<String, Object>();
+                workInfoMap.put("workId",workInfo.getWorkId());
+                workInfoMap.put("workTitle",workInfo.getWorkTitle());
+                workList.add(workInfoMap);
+            }
+        }
+
+        log.info("--根据userid = "+userId+" tag = "+tag+"获取所有相关文章相关信息: end");
+        resultMap.put("tagName",tag);
+        resultMap.put("workList",workList);
+        return resultMap;
+    }
+
     //about表-CRUD
     //插入
     public int insertAbout(String aboutUserId, String aboutContentMarkdown, String aboutContentHtml) {

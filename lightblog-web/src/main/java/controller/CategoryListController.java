@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -23,7 +22,7 @@ public class CategoryListController {
     private CategoryListService categoryListService;
 
     @RequestMapping("jumpToCategoryList")
-    public void  jumpToMianPage(String ownerId, HttpServletResponse response, HttpSession httpSession) throws IOException {
+    public void  jumpToCategoryPage(String ownerId, HttpServletResponse response, HttpSession httpSession) throws IOException {
         log.info("--分类页跳转处理：start");
         Map<String, Object> categoryMap;
         UserTemp userTemp;

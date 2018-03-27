@@ -3,7 +3,6 @@ package service;
 import pojo.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +27,7 @@ public interface WorkService {
     int deleteTagWorkByPrimaryKey(TagWorkKey tagWorkKey);
     void tagEdit(Integer workId, List<String> tagList,HttpSession httpSession);
     String getTagTip(String query,HttpSession httpSession);
+    Map<String,Object> getWorkInfoByTag(String userId,String tag,HttpSession httpSession);
 
     int insertAbout(String aboutUserId, String aboutContentMarkdown, String aboutContentHtml);
     int updateAbout(String aboutUserId, String aboutContentMarkdown, String aboutContentHtml);

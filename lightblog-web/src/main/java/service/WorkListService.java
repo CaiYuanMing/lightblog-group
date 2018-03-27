@@ -11,4 +11,5 @@ public interface WorkListService {
     Map<String,Object> getWorkListMapByOwnerId(String ownerId, HttpSession httpSession);
     UserTemp getUserTempByUserId(String userId, HttpSession httpSession);
     Map<String,Object> getWorkInfoByCategory(String userId,String category,HttpSession httpSession);
+    Map<String,Object> getWorkInfoByTag(String userId,String tag,HttpSession httpSession);
 }

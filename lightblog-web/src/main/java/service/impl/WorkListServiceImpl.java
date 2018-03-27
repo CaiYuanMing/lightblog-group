@@ -127,4 +127,8 @@ public class WorkListServiceImpl implements WorkListService {
     public Map<String, Object> getWorkInfoByCategory(String userId, String category, HttpSession httpSession) {
         return workService.getWorkInfoByCategory(userId,category,httpSession);
     }
+
+    public Map<String, Object> getWorkInfoByTag(String userId, String tag, HttpSession httpSession) {
+        return workService.getWorkInfoByTag(userId,tag,httpSession);
+    }
 }
