@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import pojo.ComitListItemBean;
 import pojo.WorkTemp;
 import service.WorkDetailService;
 import service.WorkService;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -30,27 +32,38 @@ public class WorkDetailController {
         Map<String,Object> resultMap = new HashMap<String,Object>();
 
         String visitType = (String) httpSession.getAttribute("visitType");
-       WorkTemp workTemp = (WorkTemp)httpSession.getAttribute("workTemp") ;
+        WorkTemp workTemp = (WorkTemp)httpSession.getAttribute("workTemp") ;
         resultMap.put("visitType",visitType);
         resultMap.put("workTemp",workTemp);
-
+        resultMap.put("commitList",(List<ComitListItemBean>)httpSession.getAttribute("commitList"));
+        resultMap.put("pageNature",(String)httpSession.getAttribute("pageNature"));
+        if (visitType.equals("visitor")){
+            resultMap.put("ownerId",(String)httpSession.getAttribute("ownerId"));
+        }
+        resultMap.put("isThumbUp",Boolean.parseBoolean(httpSession.getAttribute("isThumbUp").toString()));
+        resultMap.put("isShare",Boolean.parseBoolean(httpSession.getAttribute("isShare").toString()));
         log.info("-----处理文章详情页初始化：：end");
         return resultMap;
     }
 
     @RequestMapping("jumpToWorkDetail")
-    public void  jumpToWorkDetail(String ownerId,String workId, HttpServletResponse response, HttpSession httpSession) throws IOException {
-
+    public void  jumpToWorkDetail(String ownerId,String workId,String pageNature,HttpServletResponse response, HttpSession httpSession) throws IOException {
+        httpSession.setAttribute("pageNature",pageNature);
         WorkTemp workTemp = workDetailService.getWorkDetailByWorkId(workId,httpSession);
+        String userId = (String)httpSession.getAttribute("userId");
+        httpSession.setAttribute("isThumbUp",workDetailService.getIsThumbUp(userId,workId,httpSession));
+        httpSession.setAttribute("isShare",workDetailService.getIsShare(userId,workId,httpSession));
         if(ownerId==null){
             log.info("--访问类型为：master");
             httpSession.setAttribute("visitType","master");
         }else {
             log.info("--访问类型为：visitor");
             log.info("ownerId = "+ownerId);
+            httpSession.setAttribute("ownerId",ownerId);
             httpSession.setAttribute("visitType","visitor");
           }
         httpSession.setAttribute("workTemp",workTemp);
+        httpSession.setAttribute("commitList",workDetailService.getCommitListByWorkId(workId,httpSession));
         response.sendRedirect("../workDetail.html");
     }
 
@@ -62,5 +75,49 @@ public class WorkDetailController {
         Map<String,Object> resultMap = workDetailService.deleteWorkById(workId,httpSession);
         log.info("----文章删除处理：end");
         return resultMap;
+    }
+
+    @RequestMapping("shareToggle")
+    @ResponseBody
+    public Map<String,Object> shareToggle(String workId,HttpSession httpSession){
+        log.info("----推荐处理：start");
+        String actorId = (String)httpSession.getAttribute("userId");
+        return workDetailService.shareToggle(actorId,workId,httpSession);
+    }
+
+    @RequestMapping("thumbUpToggle")
+    @ResponseBody
+    public Map<String,Object> thumbUpToggle(String workId,HttpSession httpSession){
+        log.info("----点赞处理：start");
+        String actorId = (String)httpSession.getAttribute("userId");
+        return workDetailService.thumbUpToggle(actorId,workId,httpSession);
+    }
+
+    @RequestMapping("commitSubmit")
+    @ResponseBody
+    public Map<String,Object> commitSubmit(String actType,String workId,String commit,HttpSession httpSession){
+        log.info("----评论处理：start");
+        String actorId = (String)httpSession.getAttribute("userId");
+        return workDetailService.commitSubmit(actorId,actType,workId,commit,httpSession);
+    }
+
+    @RequestMapping("reCommitSubmit")
+    @ResponseBody
+    public Map<String,Object> reCommitSubmit(String toActId,String commit,HttpSession httpSession){
+        log.info("----回复处理：start");
+        return workDetailService.reCommitSubmit(toActId,commit,httpSession);
+    }
+
+    @RequestMapping("deleteCommit")
+    @ResponseBody
+    public Map<String,Object> deleteCommit(String actId){
+        return workDetailService.deleteCommit(actId);
+    }
+
+
+    @RequestMapping("editCommitSubmit")
+    @ResponseBody
+    public Map<String,Object> editCommitSubmit(String actId,String commit){
+        return workDetailService.editCommitSubmit(actId,commit);
     }
 }

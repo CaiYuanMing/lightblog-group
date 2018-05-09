@@ -15,8 +15,11 @@
         <sqlMapGenerator targetPackage="mapping" targetProject="src/main/resources" />
         <javaClientGenerator type="XMLMAPPER" targetPackage="mapper" targetProject="src/main/java" />
         <!--表名-->
-        <table tableName="work_info">
-            <generatedKey column="work_id" sqlStatement="MySql" identity="true"/>
+        <table tableName="interact">
+            <generatedKey column="act_id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="follow">
+
         </table>
     </context>
 </generatorConfiguration>

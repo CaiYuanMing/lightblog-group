@@ -61,7 +61,7 @@ public class SearchController {
     @ResponseBody
     public String searchTip(String query,String userId,HttpSession httpSession){
         log.info("接收参数 query = "+query);
-        return searchService.getSearchTips(query,userId,httpSession);
+        return searchService.getSearchTips(query,"personal",userId,httpSession);
     }
 
     @RequestMapping("searchWorkListByTitle")

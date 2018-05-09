@@ -10,6 +10,7 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 import pojo.WorkInfo;
 import pojo.WorkInfoExample;
 import service.SearchService;
+import service.UtilService;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -20,17 +21,25 @@ public class SearchServiceImpl implements SearchService {
     private  static Logger log = Logger.getLogger(SearchServiceImpl.class);
     @Autowired
     private WorkInfoMapper workInfoMapper;
+    @Autowired
+    private UtilService utilService;
 
-    public String getSearchTips(String query,String userId, HttpSession httpSession) {
+    public String getSearchTips(String query,String scope,String userId, HttpSession httpSession) {
         log.info("----搜索输入提示处理：start");
-        if (userId==null||userId.equals("")){
-            userId = (String)httpSession.getAttribute("userId");
-        }
+
         ServletContext sc = httpSession.getServletContext();
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
         WorkInfoExample workInfoExample = (WorkInfoExample)applicationContext.getBean("workInfoExample");
 
-        workInfoExample.or().andWorkUserIdEqualTo(userId).andWorkTitleLike("%"+query+"%");
+        if (scope.equals("all")){
+            workInfoExample.or().andWorkTitleLike("%"+query+"%");
+        }else {
+            if (userId==null||userId.equals("")){
+                userId = (String)httpSession.getAttribute("userId");
+            }
+            workInfoExample.or().andWorkUserIdEqualTo(userId).andWorkTitleLike("%"+query+"%");
+        }
+
         List<WorkInfo> workInfoList = workInfoMapper.selectByExample(workInfoExample);
         Set<String> searchTipSet = new HashSet<String>();
         //分类结果去重
@@ -39,28 +48,7 @@ public class SearchServiceImpl implements SearchService {
         }
         List<String> searchTipList = new ArrayList<String>(searchTipSet);
         //结果按规范封装
-        StringBuffer searchTips = new StringBuffer("");
-        for (int i = 0; i < searchTipList.size(); i++) {
-            if (i==0){
-                if (i==searchTipList.size()-1){
-                    searchTips.append("[\"");
-                    searchTips.append(searchTipList.get(i));
-                    searchTips.append("\"]");
-                }else {
-                    searchTips.append("[\"");
-                    searchTips.append(searchTipList.get(i));
-                    searchTips.append("\",");
-                }
-            }else  if (i==searchTipList.size()-1) {
-                searchTips.append("\"");
-                searchTips.append(searchTipList.get(i));
-                searchTips.append("\"]");
-            }else{
-                searchTips.append("\"");
-                searchTips.append(searchTipList.get(i));
-                searchTips.append("\",");
-            }
-        }
+        StringBuffer searchTips = utilService.formatDataForSearchTip(searchTipList);
         log.info("返回数据："+searchTips.toString());
         log.info("----搜索输入提示处理：end");
         return searchTips.toString();

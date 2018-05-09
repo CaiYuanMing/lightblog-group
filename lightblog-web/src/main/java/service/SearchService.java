@@ -5,6 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface SearchService {
-    String getSearchTips(String query,String userId,HttpSession httpSession);
+    String getSearchTips(String query,String scope,String userId,HttpSession httpSession);
     List<Map<String,Object>> getWorkListByTitle(String title,String userId,HttpSession httpSession);
 }

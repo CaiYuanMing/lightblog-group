@@ -26,7 +26,7 @@ $(function(){
             alert(worning_msg);
         },
     });
-	//分类输入框，输入提示
+	//搜索输入框，输入提示
     $('#input_search').typeahead({
         source: function (query, process) {
             console.log("正在匹配搜索关键字");

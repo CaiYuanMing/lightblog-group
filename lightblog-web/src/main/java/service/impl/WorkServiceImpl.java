@@ -1,9 +1,6 @@
 package service.impl;
 
-import mapper.AboutMapper;
-import mapper.TagWorkMapper;
-import mapper.WorkContentMapper;
-import mapper.WorkInfoMapper;
+import mapper.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -11,18 +8,21 @@ import org.springframework.scheduling.support.SimpleTriggerContext;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import pojo.*;
-import service.AboutService;
-import service.WorkDetailService;
-import service.WorkService;
+import service.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
 public class WorkServiceImpl implements WorkService {
     private static Logger log = Logger.getLogger(WorkServiceImpl.class);
     int count;
+    @Autowired
+    private UtilService utilService;
+    @Autowired
+    private InteractService interactService;
     @Autowired
     private WorkInfo workInfo;
     @Autowired
@@ -43,7 +43,13 @@ public class WorkServiceImpl implements WorkService {
     private WorkDetailService workDetailService;
     @Autowired
     private AboutService aboutService;
-//work_info表-CRUD
+
+    @Autowired
+    private ShareMapper shareMapper;
+    @Autowired
+    private InteractMapper interactMapper;
+
+    //work_info表-CRUD
     //插入
     public int insertWorkInfo(String workUserId,String workCategory,String workTitle) {
         log.info("insertWorkInfo接收参数： workUserId = "+workUserId+"\n workCategory = "+workCategory+"\nworkTitle = "+workTitle);
@@ -143,28 +149,7 @@ public class WorkServiceImpl implements WorkService {
         }
         List<String> categoryTipList = new ArrayList<String>(categoryTipSet);
         //结果按规范封装
-        StringBuffer categoryTips = new StringBuffer("");
-        for (int i = 0; i < categoryTipList.size(); i++) {
-            if (i==0){
-                if (i==categoryTipList.size()-1){
-                    categoryTips.append("[\"");
-                    categoryTips.append(categoryTipList.get(i));
-                    categoryTips.append("\"]");
-                }else {
-                    categoryTips.append("[\"");
-                    categoryTips.append(categoryTipList.get(i));
-                    categoryTips.append("\",");
-                }
-            }else  if (i==categoryTipList.size()-1) {
-                categoryTips.append("\"");
-                categoryTips.append(categoryTipList.get(i));
-                categoryTips.append("\"]");
-            }else{
-               categoryTips.append("\"");
-               categoryTips.append(categoryTipList.get(i));
-               categoryTips.append("\",");
-           }
-        }
+        StringBuffer categoryTips = utilService.formatDataForSearchTip(categoryTipList);
         log.info("返回数据："+categoryTips.toString());
         log.info("----分类输入提示处理：end");
         return categoryTips.toString();
@@ -265,33 +250,7 @@ public class WorkServiceImpl implements WorkService {
         }
         List<String> tagTipList = new ArrayList<String>(tagTipSet);
         //结果按规范封装
-        StringBuffer tagTips = new StringBuffer("");
-        for (String str:
-            tagTipSet ) {
-            System.out.println(str);
-        }
-        for (int i = 0; i < tagTipList.size(); i++) {
-
-            if (i==0){
-                if (i==tagTipList.size()-1){
-                    tagTips.append("[\"");
-                    tagTips.append(tagTipList.get(i));
-                    tagTips.append("\"]");
-                }else {
-                    tagTips.append("[\"");
-                    tagTips.append(tagTipList.get(i));
-                    tagTips.append("\",");
-                }
-            }else  if (i==tagTipList.size()-1) {
-                tagTips.append("\"");
-                tagTips.append(tagTipList.get(i));
-                tagTips.append("\"]");
-            }else{
-                tagTips.append("\"");
-                tagTips.append(tagTipList.get(i));
-                tagTips.append("\",");
-            }
-        }
+        StringBuffer tagTips = utilService.formatDataForSearchTip(tagTipList);
         log.info("返回数据："+tagTips.toString());
         log.info("----标签输入提示处理：end");
         return tagTips.toString();
@@ -329,6 +288,23 @@ public class WorkServiceImpl implements WorkService {
         return resultMap;
     }
 
+    public List<String> getTagListByWorkId(int workId, HttpSession httpSession) {
+        log.info("getTagListByWorkId : begin");
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+
+        TagWorkExample tagWorkExample = (TagWorkExample)applicationContext.getBean("tagWorkExample");
+        tagWorkExample.or().andWorkIdEqualTo(workId);
+        List<TagWorkKey> tagWorkKeyList = tagWorkMapper.selectByExample(tagWorkExample);
+        List<String> tagList = new ArrayList<String>();
+
+        for (TagWorkKey tagWorkKey:tagWorkKeyList){
+            tagList.add(tagWorkKey.getTagName());
+        }
+        log.info("getTagListByWorkId : end");
+        return tagList;
+    }
+
     //about表-CRUD
     //插入
     public int insertAbout(String aboutUserId, String aboutContentMarkdown, String aboutContentHtml) {
@@ -354,5 +330,105 @@ public class WorkServiceImpl implements WorkService {
 
     public  String getAboutMarkdown(HttpSession httpSession) {
         return aboutService.getAboutMarkdown(httpSession);
+    }
+
+    public String getSummaryByWorkId(int workId) {
+        log.info("getSummaryByWorkId:begin");
+        WorkContent workContent = workContentMapper.selectByPrimaryKey(workId);
+        String workContentHtml = workContent.getWorkContentHtml();
+        workContentHtml = workContentHtml.replaceAll("<p>"," ");
+        workContentHtml = workContentHtml.replaceAll("<[^>]+>","");//HTML标签的正则表达式
+        workContentHtml = workContentHtml.replaceAll("&nbsp","");
+//        workContentHtml = workContentHtml.replaceAll("\t|\r|\n","");//空格回车换行符\s*|
+        int endIndex;
+        if (workContentHtml.length()<140){
+            endIndex = workContentHtml.length()-1;
+        }else{
+            endIndex = 140;
+        }
+        log.info(workContentHtml.substring(0,endIndex)+"...");
+        log.info("getSummaryByWorkId:end");
+        return workContentHtml.substring(0,endIndex)+"...";
+    }
+
+    public int getPraiseSumByWorkId(int workId, HttpSession httpSession) {
+        log.info("getPraiseSumByWorkId:begin");
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+        InteractExample interactExample = (InteractExample)applicationContext.getBean("interactExample");
+        interactExample.or().andActTypeEqualTo("赞").andToWorkIdEqualTo(workId);
+        log.info("getPraiseSumByWorkId:end");
+        return interactMapper.countByExample(interactExample);
+    }
+
+    public int getComitSumByWorkId(int workId, HttpSession httpSession) {
+        log.info("getComitSumByWorkId:begin");
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+        InteractExample interactExample = (InteractExample)applicationContext.getBean("interactExample");
+        interactExample.or().andActTypeIn(Arrays.asList("回复","评论")).andToWorkIdEqualTo(workId);
+        log.info("getComitSumByWorkId:end");
+        return interactMapper.countByExample(interactExample);
+    }
+
+    public int getShareSumByWorkId(int workId, HttpSession httpSession) {
+        log.info("getShareSumByWorkId:begin");
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+        ShareExample shareExample = (ShareExample)applicationContext.getBean("shareExample");
+        shareExample.or().andWorkidEqualTo(workId);
+        log.info("getShareSumByWorkId:end");
+        return shareMapper.countByExample(shareExample);
+    }
+
+    public List<WorkInfo> getWorkInfoListByUserIdList(List<String> userIdList, HttpSession httpSession) {
+        ServletContext sc = httpSession.getServletContext();
+        ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
+        WorkInfoExample workInfoExample = (WorkInfoExample)applicationContext.getBean("workInfoExample");
+        workInfoExample.setOrderByClause("work_generates_time desc");
+        workInfoExample.or().andWorkUserIdIn(userIdList);
+        return workInfoMapper.selectByExample(workInfoExample);
+    }
+
+    public List<WorkInfo> getWorkInfoListByBrowerSum(HttpSession httpSession) {
+        log.info("根据浏览量所有文章排序查找，开始");
+        WorkInfoExample workInfoExample = (WorkInfoExample)utilService.getBeanFromApplicationContext(httpSession,"workInfoExample");
+        workInfoExample.setOrderByClause("work_browse_sum desc");
+        log.info("根据浏览量所有文章排序查找，结束");
+        return workInfoMapper.selectByExample(workInfoExample);
+    }
+
+    public List<WorkInfo> getWorkInfoListByTitleKey(String titleKey, HttpSession httpSession) {
+        log.info("getWorkInfoListByTitleKey:begin");
+        WorkInfoExample workInfoExample = (WorkInfoExample)utilService.getBeanFromApplicationContext(httpSession,"workInfoExample");
+        workInfoExample.or().andWorkTitleLike(titleKey);
+
+        log.info("getWorkInfoListByTitleKey:end");
+        return workInfoMapper.selectByExample(workInfoExample);
+    }
+
+    public String getOwnerIdByWorkId(int workId, HttpSession httpSession) {
+        WorkInfo workInfo = workInfoMapper.selectByPrimaryKey(workId);
+        return workInfo.getWorkUserId();
+    }
+
+    public boolean getIsThumbUp(String actorId, String workId, HttpSession httpSession) {
+        if (interactMapper.countByExample(interactService.getInteractExampleForThumbUp(actorId,workId,httpSession))==1){
+            log.info("已点赞");
+            return true;
+        }else {
+            log.info("未点赞");
+            return false;
+        }
+    }
+
+    public boolean getIsShare(String actorId, String workId, HttpSession httpSession) {
+        if (shareMapper.countByExample(interactService.getInteractExampleForShare(actorId,workId,httpSession))==1){
+            log.info("已推荐");
+            return true;
+        }else {
+            log.info("未推荐");
+            return false;
+        }
     }
 }

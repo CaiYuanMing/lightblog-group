@@ -53,11 +53,11 @@ public class EditorController {
     }
 
     @RequestMapping("newEdit")
-    public void  newEdit(HttpServletResponse response, HttpSession httpSession) throws IOException {
+    public void  newEdit(String pageNature,HttpServletResponse response, HttpSession httpSession) throws IOException {
         log.info("----新文章编辑跳转处理：start");
 
         httpSession.setAttribute("editType",null);
-
+        httpSession.setAttribute("pageNature",pageNature);
         log.info("----新文章编辑跳转处理：end");
         response.sendRedirect("../editPage.html");
     }
@@ -114,6 +114,7 @@ public class EditorController {
             workService.tagEdit(workId,tagList,httpSession);
             if (count>0){
                 resultMap.put("outcome","success");
+                resultMap.put("pageNature",(String)httpSession.getAttribute("pageNature"));
             }else{
                 resultMap.put("outcome","fail");
                 resultMap.put("msg","系统故障，无法保存完整文章信息");

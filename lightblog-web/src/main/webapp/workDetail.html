@@ -6,7 +6,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>LightBlog-全文阅读</title>
 	<!--css-->
-	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	
+	<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" >	
 	<link rel="stylesheet" href="css/jquery-confirm.min.css" >
 	<link rel="stylesheet" href="editormd/css/editormd.preview.css" />
 	<link href="css/page_work_detail.css" rel="stylesheet">
@@ -17,30 +18,110 @@
 <div class="container-fluid auto_height bold_black_top_border font_basic height_full">
 	<div class="row">
 		<div id="content_main" class="col-md-9 col-xs-12">
-			<div id="val_workId"></div>
-			<div class="val_ownerId"></div>
-			<div id="container_work" class="center-block text-center">
-				<div class="id_article_for_dispatcher"></div>
-				<div class="head_ceil_content_flow">
-					<div class="title_article"></div>
-					<div class="info_article text-muted">
+			<div class="row">
+				<div id="val_workId"></div>
+				<div class="val_ownerId"></div>
+			</div>
+			<div class="row">
+				<div id="container_work" class="col-md-10 col-md-offset-1 text-center">
+					<div class="id_article_for_dispatcher"></div>
+					<div class="head_ceil_content_flow">
+						<div class="title_article"></div>
+						<div class="info_article text-muted">
+						</div>
+					</div>
+					<div id="content_article" class="content_article text-justify"></div>
+					<div class="tag_article text-center"></div>
+					<hr class="hr_sepa">
+					<div id="block_interact">
+						<div>
+							<div id="block_thumbUp" class="btn inline_block margin_right_20 button_active">
+								<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>&nbsp;赞
+							</div>
+							<div id="block_share" class="btn inline_block">
+								<span class="glyphicon glyphicon-send" aria-hidden="true"></span>&nbsp;荐
+							</div>
+						</div>
+						<div>
+							<textarea id="input_commit" class="form-control" rows="1" maxlength="140" placeholder="输入你的评论，按Ctrl+Enter发布..."></textarea>
+						</div>						
 					</div>
 				</div>
-				<div id="content_article" class="content_article text-justify"></div>
-				<div class="tag_article text-center"></div>
-				<hr class="hr_sepa">
 			</div>
-
-			<div id="declare_foot" class="text-center">
-				<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>&nbsp;2017&nbsp;&nbsp;
-				<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;LightBlog
+			<div class="row">
+				<ul id="container_commit" class="media-list magin_top_15 col-md-10 col-md-offset-1">
+<!--
+					<li class="media">
+						<div class="media-left">
+						  <a href="#">
+							<img class="media-object head_icon" src="http://img4.duitang.com/uploads/item/201511/26/20151126112617_vUaQf.jpeg" alt="...">
+						  </a>
+						</div>
+						<div class="media-body">
+					  	  <div class="pull-right text-muted">3 个小时前</div>
+						  <div><a href="###"><strong>张士超</strong></a></div>						  
+						  <div class="text">Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis.</div>
+							<div class="thin_grey_bottom_border">
+							  <a href="##">回复</a>
+							  <a href="##">编辑</a>
+							  <a href="##">删除</a>
+							</div>
+						 
+						  <ul class="media-list">
+							<li class="media">
+								<div class="media-left">
+								  <a href="#">
+									<img class="media-object head_icon" src="http://img3.duitang.com/uploads/item/201604/21/20160421013826_ezW5j.jpeg" alt="...">
+								  </a>
+								</div>
+								<div class="media-body">
+							  	  <div class="pull-right text-muted">3 个小时前</div>
+								  <div><a href="###"><strong>Catouse</strong></a> <span class="text-muted">回复</span> <a   href="###">张士超</a></div>
+									<div class="text">你到底把我家钥匙放哪里了...</div>
+									<div class="thin_grey_bottom_border">
+									  <a href="##">回复</a>
+									  <a href="##">编辑</a>
+									  <a href="##">删除</a>
+									</div>
+								</div>
+							</li>
+							<li class="media">
+								<div class="media-left">
+								  <a href="#">
+									<img class="media-object head_icon" src="http://img3.duitang.com/uploads/item/201604/21/20160421013826_ezW5j.jpeg" alt="...">
+								  </a>
+								</div>
+								<div class="media-body">
+							  	  <div class="pull-right text-muted">3 个小时前</div>
+								  <div><a href="###"><strong>Catouse</strong></a> <span class="text-muted">回复</span> <a   href="###">张士超</a></div>
+									<div class="text">你到底把我家钥匙放哪里了...</div>
+									<div class="thin_grey_bottom_border">
+									  <a href="##">回复</a>
+									  <a href="##">编辑</a>
+									  <a href="##">删除</a>
+									</div>
+								</div>
+							</li>							
+							
+						</ul>			
+						</div>
+				  	</li>
+-->
+				  	
+				</ul>				  
+			</div>
+			<div class="row">
+				<div id="declare_foot" class="text-center col-md-12">
+					<span class="glyphicon glyphicon-copyright-mark" aria-hidden="true"></span>&nbsp;2017&nbsp;&nbsp;
+					<span class="glyphicon glyphicon-globe" aria-hidden="true"></span>&nbsp;LightBlog
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 <div id="container_toc" class="col-md-3 hidden-xs"></div>
 
-<div id="toc_togggle" class="hidden-xs bg-success" data-toggle="tooltip" title="关闭TOC">
+<div id="toc_togggle" class="hidden-xs bg-success" data-toggle="tooltip" title="切换TOC">
 	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
 </div>
 <div id="btn_to_re_edit" class="hidden-xs" data-toggle="tooltip" title="重新编辑">
@@ -48,6 +129,9 @@
 </div>
 <div id="btn_to_delete" class="hidden-xs" data-toggle="tooltip" title="删除文章">
 	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+</div>
+<div id="btn_back" class="hidden-xs" data-toggle="tooltip" data-placement="bottom"  title="返回">
+	<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>
 </div>
 <div id="btn_get_menu" class="hidden-xs" data-toggle="tooltip" data-placement="bottom"  title="菜单">
 	<span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span>

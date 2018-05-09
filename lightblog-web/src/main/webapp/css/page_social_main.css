@@ -1,0 +1,29 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+.content_card_title {
+	margin: 10px 0;	
+}
+
+#container_main {
+	margin-top: 50px;	
+}
+
+.card_article {
+	border: 1px solid #EFF0F1;	
+	margin-bottom: 20px;
+	background-color: white;
+	padding: 15px 20px;
+}
+
+#container_work {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+#content_main {
+	background-color: #F5F6F7;
+}

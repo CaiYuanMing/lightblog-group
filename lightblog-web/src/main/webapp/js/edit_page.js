@@ -180,6 +180,9 @@ $(function(){
                             dataType: "json"
                         }).done(function (response) {
                             if ("success" === response.outcome) {
+								if(response.pageNature==="social"){
+									map_url_by_edit_type["newEdit"]="social_main.html";
+								}	
                                 self.setType('green');
                                 self.buttons.backAction.addClass('btn-green');
                                 self.setTitle('保存成功');
@@ -201,6 +204,7 @@ $(function(){
                     autoClose: 'backAction|7000',
                     onDestroy: function () {
                         // when the modal is removed from DOM
+										
                         var url = map_url_by_edit_type[edit_type];
                         window.location.href = url;
                     },
