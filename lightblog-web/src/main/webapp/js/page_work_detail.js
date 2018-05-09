@@ -247,19 +247,24 @@ $(function(){
         },
         dataType: "json",
         success: function(data){
-			if("success"===data.outcome){
-				console.log(data.msg);
-				if("点赞成功！"===data.msg){
-					console.log("点亮赞");
-					$("#block_thumbUp").removeClass("button_sleep");
-					$("#block_thumbUp").addClass("button_active");
-				}else{
-					$("#block_thumbUp").removeClass("button_active");
-					$("#block_thumbUp").addClass("button_sleep");
-				}  
+			if("false"===data.isLogined){
+				window.location.href = "login_register.html";
 			}else{
-				alert(data.msg);
+				if("success"===data.outcome){				
+					console.log(data.msg);
+					if("点赞成功！"===data.msg){
+						console.log("点亮赞");
+						$("#block_thumbUp").removeClass("button_sleep");
+						$("#block_thumbUp").addClass("button_active");
+					}else{
+						$("#block_thumbUp").removeClass("button_active");
+						$("#block_thumbUp").addClass("button_sleep");
+					}  
+				}else{
+					alert(data.msg);
+				}
 			}
+			
                     
         },
         error: function(jqXHR){
@@ -279,18 +284,22 @@ $(function(){
         },
         dataType: "json",
         success: function(data){
-			if("success"===data.outcome){
-				console.log(data.msg);
-				if("推荐成功！"===data.msg){
-					$("#block_share").removeClass("button_sleep");
-					$("#block_share").addClass("button_active");
-				}else{
-					$("#block_share").removeClass("button_active");
-					$("#block_share").addClass("button_sleep");
-				}  
+			if("false"===data.isLogined){
+				window.location.href = "login_register.html";
 			}else{
-				alert(data.msg);
-			}
+				if("success"===data.outcome){				
+					console.log(data.msg);
+					if("推荐成功！"===data.msg){
+						$("#block_share").removeClass("button_sleep");
+						$("#block_share").addClass("button_active");
+					}else{
+						$("#block_share").removeClass("button_active");
+						$("#block_share").addClass("button_sleep");
+					}  
+				}else{
+					alert(data.msg);
+				}
+			}			
                     
         },
         error: function(jqXHR){
@@ -316,16 +325,20 @@ $(function(){
 					},
 					dataType: "json",		
 					success: function(data){
-						console.log(data);
-						if("success"===data.outcome){
-							console.log("评论提交成功！");
-							var url_to_personal_page = '/lightblog/mainpage/jumpToMianPage?ownerId='+data.simpleCommitBean.actorId;
-							str = '<li class="media"><div class="media-left"><a href="'+url_to_personal_page+'"><img class="media-object head_icon" src="'+data.simpleCommitBean.actorHeadIconPath+'"></a></div><div class="media-body"><div class="pull-right text-muted">'+data.simpleCommitBean.actGenerateTime+'</div><div><a href="'+url_to_personal_page+'"><strong>'+data.simpleCommitBean.actorName+'</strong></a></div><div id="text_'+data.simpleCommitBean.actId+'" class="text">'+data.simpleCommitBean.commitContent+'</div><div class="thin_grey_bottom_border"><a onclick="javascript:to_edit_commit('+data.simpleCommitBean.actId+');return false;" href="#">编辑</a><a onclick="javascript:delete_commit('+data.simpleCommitBean.actId+');return false;" href="#">删除</a></div>';
-							$("#container_commit").prepend(str);
-							$("#input_commit").val("");
+						if("false"===data.isLogined){
+							window.location.href = "login_register.html";
 						}else{
-							alert("Opp,评论提交出错了!");
-						}
+							console.log(data);
+							if("success"===data.outcome){
+								console.log("评论提交成功！");
+								var url_to_personal_page = '/lightblog/mainpage/jumpToMianPage?ownerId='+data.simpleCommitBean.actorId;
+								str = '<li class="media"><div class="media-left"><a href="'+url_to_personal_page+'"><img class="media-object head_icon" src="'+data.simpleCommitBean.actorHeadIconPath+'"></a></div><div class="media-body"><div class="pull-right text-muted">'+data.simpleCommitBean.actGenerateTime+'</div><div><a href="'+url_to_personal_page+'"><strong>'+data.simpleCommitBean.actorName+'</strong></a></div><div id="text_'+data.simpleCommitBean.actId+'" class="text">'+data.simpleCommitBean.commitContent+'</div><div class="thin_grey_bottom_border"><a onclick="javascript:to_edit_commit('+data.simpleCommitBean.actId+');return false;" href="#">编辑</a><a onclick="javascript:delete_commit('+data.simpleCommitBean.actId+');return false;" href="#">删除</a></div>';
+								$("#container_commit").prepend(str);
+								$("#input_commit").val("");
+							}else{
+								alert("Opp,评论提交出错了!");
+							}
+						}						
 					},
 					error: function(jqXHR){
 						var worning_msg = "发生错误：" + jqXHR.status;

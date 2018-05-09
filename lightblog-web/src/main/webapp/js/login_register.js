@@ -132,7 +132,7 @@ $(function(){
                     if ("success" === data.outcome) {
                         $.status_on_success($("#input_userpassword_login"));
                         // $("#form_login").submit();
-                        window.location.href='social_main.html';
+                        window.location.href= data.urlToJump;
                     } else {
                         console.log("data.outcome = "+data.outcome+"data.msg = "+data.msg);
 

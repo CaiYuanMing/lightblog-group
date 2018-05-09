@@ -58,7 +58,7 @@ public class LoginController {
     @RequestMapping("check_match_userid_password")
     @ResponseBody
     public Map<String,Object> userIdPasswordMatchCheck(String userId, String password, HttpSession httpSession){
-
+        String urlToJump = "social_main.html";
         log.info("进入用户id密码匹配校验，接受到参数 userId = "+userId+" password ="+password);
         ServletContext sc = httpSession.getServletContext();
         ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(sc);
@@ -68,10 +68,14 @@ public class LoginController {
         Map<String,Object> resultMap = new HashMap<String,Object>();
         userExample.createCriteria().andUserIdEqualTo(userId).andUserPasswordEqualTo(password);
         if (loginService.isUserExistForLg(userExample)){
+            log.info("用户id密码匹配校验: 匹配");
             resultMap.put("outcome","success");
             httpSession.setAttribute("userId",userId);
             httpSession.setAttribute("userName",userService.getUserNameByUserId(userId));
-            log.info("用户id密码匹配校验: 匹配");
+            if (httpSession.getAttribute("urlToJump")!=null){
+                urlToJump = (String)httpSession.getAttribute("urlToJump");
+            }
+            resultMap.put("urlToJump",urlToJump);
         }else {
             resultMap.put("outcome","fail");
             resultMap.put("msg","邮箱或密码错误！");

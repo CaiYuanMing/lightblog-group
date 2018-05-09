@@ -11,7 +11,9 @@ import pojo.*;
 import service.*;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -360,4 +362,5 @@ public class WorkDetailServiceImpl implements WorkDetailService {
         Interact interact = interactMapper.selectByPrimaryKey(toActId);
         return interact.getActContent();
     }
+
 }
